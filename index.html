@@ -14,365 +14,138 @@
     --text-primary: #1A1A1A;
     --text-secondary: #6B6960;
     --text-muted: #9C9890;
-
     --ninja-black: #1A1A1A;
     --ninja-orange: #E85D26;
     --ninja-orange-light: rgba(232, 93, 38, 0.12);
     --ninja-red: #C0392B;
-
     --size-s: #2EAF7D;
-    --size-s-bg: rgba(46, 175, 125, 0.15);
-    --size-s-border: rgba(46, 175, 125, 0.4);
     --size-m: #E8902A;
-    --size-m-bg: rgba(232, 144, 42, 0.15);
-    --size-m-border: rgba(232, 144, 42, 0.4);
     --size-l: #D64545;
-    --size-l-bg: rgba(214, 69, 69, 0.15);
-    --size-l-border: rgba(214, 69, 69, 0.4);
-
     --p50: #2EAF7D;
     --p85: #E8902A;
     --p95: #D64545;
+    --danger: #D64545;
+    --danger-bg: rgba(214,69,69,0.08);
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; }
 
-  body {
-    font-family: 'Space Grotesk', sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    min-height: 100vh;
-  }
+  .header { background: var(--ninja-black); color: #fff; padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .logo-mark { width: 42px; height: 42px; background: var(--ninja-orange); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #fff; }
+  .header h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
+  .header h1 span { color: var(--ninja-orange); }
+  .header-right { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.5); }
 
-  .header {
-    background: var(--ninja-black);
-    color: #fff;
-    padding: 28px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
+  .main { max-width: 1280px; margin: 0 auto; padding: 32px 40px; }
 
-  .header-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; }
+  .stat-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 5px; }
+  .stat-card .value { font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: -1px; }
+  .stat-card .unit { font-size: 13px; font-weight: 400; color: var(--text-secondary); margin-left: 4px; }
 
-  .logo-mark {
-    width: 42px;
-    height: 42px;
-    background: var(--ninja-orange);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 18px;
-    color: #fff;
-    letter-spacing: -1px;
-  }
+  .section-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .section-title { font-size: 15px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 4px; height: 18px; background: var(--ninja-orange); border-radius: 2px; }
 
-  .header h1 {
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
-  }
+  /* Time range filter */
+  .range-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+  .range-btn { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 16px; border-radius: 8px; border: 2px solid var(--border); background: var(--surface); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; }
+  .range-btn:hover { border-color: var(--text-muted); }
+  .range-btn.active { border-color: var(--ninja-orange); background: var(--ninja-orange-light); color: var(--ninja-orange); font-weight: 600; }
+  .range-info { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-left: 8px; display: flex; align-items: center; }
 
-  .header h1 span {
-    color: var(--ninja-orange);
+  /* Add form */
+  .add-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+  .add-form .field { display: flex; flex-direction: column; gap: 4px; }
+  .add-form label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); font-weight: 500; }
+  .add-form input, .add-form select {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 8px 12px;
+    border: 2px solid var(--border); border-radius: 8px; background: var(--surface-alt);
+    color: var(--text-primary); outline: none; transition: border-color 0.2s;
   }
+  .add-form input:focus, .add-form select:focus { border-color: var(--ninja-orange); }
+  .add-form input[type="date"] { min-width: 150px; }
+  .add-form input[type="number"] { width: 90px; }
+  .btn-add {
+    font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600;
+    padding: 8px 20px; border-radius: 8px; border: none;
+    background: var(--ninja-orange); color: #fff; cursor: pointer; transition: all 0.2s;
+    height: 38px;
+  }
+  .btn-add:hover { background: #D04E1C; }
+  .btn-add:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .header-right {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
+  /* Delete mode */
+  .delete-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn-delete-mode {
+    font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600;
+    padding: 8px 20px; border-radius: 8px; border: 2px solid var(--border);
+    background: var(--surface); color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
+    height: 38px;
   }
+  .btn-delete-mode:hover { border-color: var(--danger); color: var(--danger); }
+  .btn-delete-mode.active { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
+  .delete-hint { font-size: 12px; color: var(--danger); font-style: italic; display: none; }
+  .delete-hint.visible { display: inline; }
 
-  .main {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 32px 40px;
-  }
+  /* Percentile grid */
+  .percentile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .percentile-group { border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; background: var(--surface-alt); }
+  .percentile-group-title { font-size: 14px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+  .percentile-group-title .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .percentile-toggles { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ptoggle { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: 8px; border: 2px solid var(--border); background: var(--surface); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; user-select: none; }
+  .ptoggle:hover { border-color: var(--text-muted); }
+  .ptoggle:disabled { opacity: 0.35; cursor: not-allowed; }
+  .ptoggle.active-p50 { border-color: var(--p50); background: rgba(46,175,125,0.08); color: var(--p50); }
+  .ptoggle.active-p85 { border-color: var(--p85); background: rgba(232,144,42,0.08); color: var(--p85); }
+  .ptoggle.active-p95 { border-color: var(--p95); background: rgba(214,69,69,0.08); color: var(--p95); }
+  .percentile-values { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .pval { font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 5px 12px; border-radius: 6px; display: none; font-weight: 500; }
+  .pval.visible { display: inline-block; }
+  .pval-p50 { background: rgba(46,175,125,0.12); color: var(--p50); }
+  .pval-p85 { background: rgba(232,144,42,0.12); color: var(--p85); }
+  .pval-p95 { background: rgba(214,69,69,0.12); color: var(--p95); }
+  .no-data-hint { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 8px; }
 
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 32px;
-  }
+  /* Chart */
+  .chart-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
+  .chart-header h2 { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
+  .chart-header p { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .chart-area { position: relative; width: 100%; height: 460px; overflow: visible; }
+  canvas { display: block; width: 100%; height: 100%; }
 
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
-  }
+  .tooltip { position: absolute; background: var(--ninja-black); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-family: 'JetBrains Mono', monospace; pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 100; white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--ninja-black); }
+  .tooltip.delete-mode { background: var(--danger); }
+  .tooltip.delete-mode::after { border-top-color: var(--danger); }
 
-  .stat-card .label {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-  }
+  .footer { text-align: center; padding: 24px 40px; font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+  .footer a { color: var(--ninja-orange); text-decoration: none; }
 
-  .stat-card .value {
-    font-size: 32px;
-    font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: -1px;
-  }
-
-  .stat-card .unit {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text-secondary);
-    margin-left: 4px;
-  }
-
-  .chart-container {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    margin-bottom: 24px;
-    position: relative;
-  }
-
-  .chart-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
-  .chart-header h2 {
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: -0.3px;
-  }
-
-  .chart-header p {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-top: 4px;
-  }
-
-  .legend {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-secondary);
-  }
-
-  .legend-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-  }
-
-  .chart-area {
-    position: relative;
-    width: 100%;
-    height: 460px;
-    overflow: visible;
-  }
-
-  canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  .controls-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px 32px;
-    margin-bottom: 24px;
-  }
-
-  .controls-section h3 {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .controls-section h3::before {
-    content: '';
-    display: block;
-    width: 4px;
-    height: 18px;
-    background: var(--ninja-orange);
-    border-radius: 2px;
-  }
-
-  .percentile-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 20px;
-  }
-
-  .percentile-group {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
-    background: var(--surface-alt);
-  }
-
-  .percentile-group-title {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .percentile-group-title .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }
-
-  .percentile-toggles {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .ptoggle {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 2px solid var(--border);
-    background: var(--surface);
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-  }
-
-  .ptoggle:hover {
-    border-color: var(--text-muted);
-  }
-
-  .ptoggle.active-p50 {
-    border-color: var(--p50);
-    background: rgba(46, 175, 125, 0.08);
-    color: var(--p50);
-  }
-
-  .ptoggle.active-p85 {
-    border-color: var(--p85);
-    background: rgba(232, 144, 42, 0.08);
-    color: var(--p85);
-  }
-
-  .ptoggle.active-p95 {
-    border-color: var(--p95);
-    background: rgba(214, 69, 69, 0.08);
-    color: var(--p95);
-  }
-
-  .percentile-values {
-    display: flex;
-    gap: 12px;
-    margin-top: 14px;
-    flex-wrap: wrap;
-  }
-
-  .pval {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    padding: 5px 12px;
-    border-radius: 6px;
-    display: none;
-    font-weight: 500;
-  }
-
-  .pval.visible {
-    display: inline-block;
-  }
-
-  .pval-p50 {
-    background: rgba(46, 175, 125, 0.12);
-    color: var(--p50);
-  }
-
-  .pval-p85 {
-    background: rgba(232, 144, 42, 0.12);
-    color: var(--p85);
-  }
-
-  .pval-p95 {
-    background: rgba(214, 69, 69, 0.12);
-    color: var(--p95);
-  }
-
-  .tooltip {
-    position: absolute;
-    background: var(--ninja-black);
-    color: #fff;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-family: 'JetBrains Mono', monospace;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.15s;
-    z-index: 100;
-    white-space: nowrap;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  }
-
-  .tooltip::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 6px solid transparent;
-    border-top-color: var(--ninja-black);
-  }
-
-  .footer {
-    text-align: center;
-    padding: 24px 40px;
-    font-size: 12px;
-    color: var(--text-muted);
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .footer a {
-    color: var(--ninja-orange);
-    text-decoration: none;
-  }
+  /* Confirm dialog */
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; }
+  .overlay.visible { display: flex; }
+  .dialog { background: var(--surface); border-radius: 16px; padding: 32px; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+  .dialog h3 { font-size: 16px; margin-bottom: 12px; }
+  .dialog p { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5; }
+  .dialog-btns { display: flex; gap: 10px; justify-content: flex-end; }
+  .dialog-btns button { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 20px; border-radius: 8px; cursor: pointer; border: none; transition: all 0.15s; }
+  .btn-cancel { background: var(--surface-alt); color: var(--text-secondary); border: 1px solid var(--border) !important; }
+  .btn-cancel:hover { background: var(--border); }
+  .btn-confirm-delete { background: var(--danger); color: #fff; }
+  .btn-confirm-delete:hover { background: #B83A3A; }
 
   @media (max-width: 768px) {
-    .header { padding: 20px 20px; }
+    .header { padding: 20px; }
     .main { padding: 20px; }
-    .chart-container { padding: 20px; }
+    .section-card { padding: 20px; }
     .chart-area { height: 340px; }
-    .controls-section { padding: 20px; }
     .stats-row { grid-template-columns: 1fr 1fr; }
   }
 </style>
@@ -391,21 +164,74 @@
 
   <div class="stats-row" id="statsRow"></div>
 
-  <div class="controls-section">
-    <h3>Linie percentylowe</h3>
+  <!-- Data management -->
+  <div class="section-card">
+    <div class="section-title">Zarządzanie danymi</div>
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      <div>
+        <div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:10px;">Dodaj element</div>
+        <div class="add-form" id="addForm">
+          <div class="field">
+            <label>Data ukończenia</label>
+            <input type="date" id="addDate">
+          </div>
+          <div class="field">
+            <label>Rozmiar</label>
+            <select id="addSize">
+              <option value="S">S</option>
+              <option value="M" selected>M</option>
+              <option value="L">L</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Lead time (dni)</label>
+            <input type="number" id="addLT" min="1" placeholder="np. 42">
+          </div>
+          <button class="btn-add" onclick="addPoint()">+ Dodaj</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:10px;">Usuń element</div>
+        <div class="delete-controls">
+          <button class="btn-delete-mode" id="btnDeleteMode" onclick="toggleDeleteMode()">🗑 Tryb usuwania</button>
+          <span class="delete-hint" id="deleteHint">Kliknij punkt na wykresie, aby go usunąć</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Time range filter -->
+  <div class="section-card">
+    <div class="section-title">Zakres danych do prognoz</div>
+    <div style="display:flex; align-items:center; flex-wrap:wrap; gap: 8px;">
+      <div class="range-bar" id="rangeBar">
+        <button class="range-btn active" data-months="0" onclick="setRange(this)">Całość</button>
+        <button class="range-btn" data-months="12" onclick="setRange(this)">12 mies.</button>
+        <button class="range-btn" data-months="6" onclick="setRange(this)">6 mies.</button>
+        <button class="range-btn" data-months="3" onclick="setRange(this)">3 mies.</button>
+        <button class="range-btn" data-months="1" onclick="setRange(this)">1 mies.</button>
+      </div>
+      <span class="range-info" id="rangeInfo"></span>
+    </div>
+  </div>
+
+  <!-- Percentiles -->
+  <div class="section-card">
+    <div class="section-title">Linie percentylowe</div>
     <div class="percentile-grid" id="percentileGrid"></div>
   </div>
 
-  <div class="chart-container">
+  <!-- Chart -->
+  <div class="section-card" style="padding-bottom:24px;">
     <div class="chart-header">
       <div>
         <h2>Czasy realizacji &mdash; Scatterplot</h2>
         <p>Oś X: data ukończenia &nbsp;|&nbsp; Oś Y: czas realizacji (dni)</p>
       </div>
       <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--size-s)"></div>S &mdash; Small</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--size-m)"></div>M &mdash; Medium</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--size-l)"></div>L &mdash; Large</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--size-s)"></div>S</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--size-m)"></div>M</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--size-l)"></div>L</div>
       </div>
     </div>
     <div class="chart-area">
@@ -420,8 +246,21 @@
   Built for <a href="https://www.leanagile.ninja" target="_blank">LeanAgileNinja</a> &middot; Kanban Lead Time Analysis
 </div>
 
+<!-- Delete confirmation dialog -->
+<div class="overlay" id="deleteOverlay">
+  <div class="dialog">
+    <h3>Usunąć element?</h3>
+    <p id="deleteMsg"></p>
+    <div class="dialog-btns">
+      <button class="btn-cancel" onclick="cancelDelete()">Anuluj</button>
+      <button class="btn-confirm-delete" onclick="confirmDelete()">Usuń</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const RAW_DATA = [
+// ── DATA ──
+let data = [
   { date: '2024-07-15', size: 'S', lt: 49 },
   { date: '2024-08-22', size: 'S', lt: 48 },
   { date: '2024-09-10', size: 'S', lt: 87 },
@@ -465,104 +304,171 @@ const COLORS = {
   M: { fill: '#E8902A', bg: 'rgba(232,144,42,0.18)', stroke: 'rgba(232,144,42,0.6)' },
   L: { fill: '#D64545', bg: 'rgba(214,69,69,0.18)', stroke: 'rgba(214,69,69,0.6)' },
 };
+const PCOLORS = { 50: { dash: [] }, 85: { dash: [8, 4] }, 95: { dash: [4, 4] } };
+const sizeLabels = { S: 'Small (S)', M: 'Medium (M)', L: 'Large (L)' };
+const monthsPL = ['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'];
+const monthNames = ['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Paź','Lis','Gru'];
 
-const PCOLORS = {
-  50: { line: '#2EAF7D', dash: [] },
-  85: { line: '#E8902A', dash: [8, 4] },
-  95: { line: '#D64545', dash: [4, 4] },
-};
+// ── STATE ──
+const activePercentiles = { S: new Set(), M: new Set(), L: new Set() };
+let rangeMonths = 0; // 0 = all
+let deleteMode = false;
+let pendingDeleteIdx = -1;
 
+// ── HELPERS ──
 function percentile(arr, p) {
+  if (!arr.length) return 0;
   const sorted = [...arr].sort((a, b) => a - b);
   const idx = (p / 100) * (sorted.length - 1);
-  const lo = Math.floor(idx);
-  const hi = Math.ceil(idx);
-  if (lo === hi) return sorted[lo];
-  return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
+  const lo = Math.floor(idx), hi = Math.ceil(idx);
+  return lo === hi ? sorted[lo] : sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
 }
 
-// State
-const activePercentiles = { S: new Set(), M: new Set(), L: new Set() };
+function getFilteredData() {
+  if (rangeMonths === 0) return data;
+  const maxD = new Date(Math.max(...data.map(d => new Date(d.date))));
+  const cutoff = new Date(maxD);
+  cutoff.setMonth(cutoff.getMonth() - rangeMonths);
+  return data.filter(d => new Date(d.date) >= cutoff);
+}
 
-// Compute percentiles per size
-const sizeData = {};
-['S', 'M', 'L'].forEach(s => {
-  const vals = RAW_DATA.filter(d => d.size === s).map(d => d.lt);
-  sizeData[s] = {
-    count: vals.length,
-    p50: Math.round(percentile(vals, 50)),
-    p85: Math.round(percentile(vals, 85)),
-    p95: Math.round(percentile(vals, 95)),
-    min: Math.min(...vals),
-    max: Math.max(...vals),
-    avg: Math.round(vals.reduce((a, b) => a + b, 0) / vals.length),
-  };
-});
+function fmtDate(d) {
+  const dt = new Date(d);
+  return `${dt.getDate()} ${monthsPL[dt.getMonth()]} ${dt.getFullYear()}`;
+}
 
-// Stats row
-const allLTs = RAW_DATA.map(d => d.lt);
-const statsHTML = [
-  { label: 'Elementy', value: RAW_DATA.length, unit: '' },
-  { label: 'Średni LT', value: Math.round(allLTs.reduce((a, b) => a + b, 0) / allLTs.length), unit: 'dni' },
-  { label: 'Mediana LT', value: Math.round(percentile(allLTs, 50)), unit: 'dni' },
-  { label: 'Min / Max', value: `${Math.min(...allLTs)} / ${Math.max(...allLTs)}`, unit: 'dni' },
-].map(s => `
-  <div class="stat-card">
-    <div class="label">${s.label}</div>
-    <div class="value">${s.value}<span class="unit">${s.unit}</span></div>
-  </div>
-`).join('');
-document.getElementById('statsRow').innerHTML = statsHTML;
+// ── STATS ──
+function updateStats() {
+  const filtered = getFilteredData();
+  const lts = filtered.map(d => d.lt);
+  const n = lts.length;
+  const avg = n ? Math.round(lts.reduce((a,b) => a+b, 0) / n) : '—';
+  const med = n ? Math.round(percentile(lts, 50)) : '—';
+  const minmax = n ? `${Math.min(...lts)} / ${Math.max(...lts)}` : '—';
+  const rangeLabel = rangeMonths === 0 ? 'wszystkie' : `ostatnie ${rangeMonths} mies.`;
 
-// Percentile controls
-const sizeLabels = { S: 'Small (S)', M: 'Medium (M)', L: 'Large (L)' };
-document.getElementById('percentileGrid').innerHTML = ['S', 'M', 'L'].map(s => {
-  const d = sizeData[s];
-  return `
-    <div class="percentile-group">
-      <div class="percentile-group-title">
-        <div class="dot" style="background:${COLORS[s].fill}"></div>
-        ${sizeLabels[s]} &mdash; ${d.count} elementów
-      </div>
-      <div class="percentile-toggles">
-        <button class="ptoggle" data-size="${s}" data-p="50" onclick="toggleP(this)">P50</button>
-        <button class="ptoggle" data-size="${s}" data-p="85" onclick="toggleP(this)">P85</button>
-        <button class="ptoggle" data-size="${s}" data-p="95" onclick="toggleP(this)">P95</button>
-      </div>
-      <div class="percentile-values" id="pvals-${s}">
-        <span class="pval pval-p50" id="pv-${s}-50">P50 = ${d.p50} dni</span>
-        <span class="pval pval-p85" id="pv-${s}-85">P85 = ${d.p85} dni</span>
-        <span class="pval pval-p95" id="pv-${s}-95">P95 = ${d.p95} dni</span>
-      </div>
-    </div>
-  `;
-}).join('');
+  document.getElementById('statsRow').innerHTML = [
+    { label: 'Elementy (total)', value: data.length, unit: '' },
+    { label: `W zakresie (${rangeLabel})`, value: n, unit: '' },
+    { label: 'Średni LT', value: avg, unit: n ? 'dni' : '' },
+    { label: 'Mediana LT', value: med, unit: n ? 'dni' : '' },
+    { label: 'Min / Max', value: minmax, unit: n ? 'dni' : '' },
+  ].map(s => `<div class="stat-card"><div class="label">${s.label}</div><div class="value">${s.value}<span class="unit">${s.unit}</span></div></div>`).join('');
+}
+
+// ── PERCENTILE CONTROLS ──
+function computeSizePercentiles() {
+  const filtered = getFilteredData();
+  const result = {};
+  ['S','M','L'].forEach(s => {
+    const vals = filtered.filter(d => d.size === s).map(d => d.lt);
+    result[s] = {
+      count: vals.length,
+      p50: vals.length ? Math.round(percentile(vals, 50)) : null,
+      p85: vals.length ? Math.round(percentile(vals, 85)) : null,
+      p95: vals.length ? Math.round(percentile(vals, 95)) : null,
+    };
+  });
+  return result;
+}
+
+function renderPercentileControls() {
+  const sd = computeSizePercentiles();
+  document.getElementById('percentileGrid').innerHTML = ['S','M','L'].map(s => {
+    const d = sd[s];
+    const noData = d.count === 0;
+    return `
+      <div class="percentile-group">
+        <div class="percentile-group-title">
+          <div class="dot" style="background:${COLORS[s].fill}"></div>
+          ${sizeLabels[s]} — ${d.count} elem.
+        </div>
+        <div class="percentile-toggles">
+          <button class="ptoggle ${activePercentiles[s].has(50)?'active-p50':''}" data-size="${s}" data-p="50" onclick="toggleP(this)" ${noData?'disabled':''}>P50</button>
+          <button class="ptoggle ${activePercentiles[s].has(85)?'active-p85':''}" data-size="${s}" data-p="85" onclick="toggleP(this)" ${noData?'disabled':''}>P85</button>
+          <button class="ptoggle ${activePercentiles[s].has(95)?'active-p95':''}" data-size="${s}" data-p="95" onclick="toggleP(this)" ${noData?'disabled':''}>P95</button>
+        </div>
+        <div class="percentile-values">
+          ${noData ? '<span class="no-data-hint">Brak danych w wybranym zakresie</span>' : `
+            <span class="pval pval-p50 ${activePercentiles[s].has(50)?'visible':''}">P50 = ${d.p50} dni</span>
+            <span class="pval pval-p85 ${activePercentiles[s].has(85)?'visible':''}">P85 = ${d.p85} dni</span>
+            <span class="pval pval-p95 ${activePercentiles[s].has(95)?'visible':''}">P95 = ${d.p95} dni</span>
+          `}
+        </div>
+      </div>`;
+  }).join('');
+}
 
 function toggleP(btn) {
-  const s = btn.dataset.size;
-  const p = parseInt(btn.dataset.p);
-  if (activePercentiles[s].has(p)) {
-    activePercentiles[s].delete(p);
-    btn.classList.remove(`active-p${p}`);
-    document.getElementById(`pv-${s}-${p}`).classList.remove('visible');
-  } else {
-    activePercentiles[s].add(p);
-    btn.classList.add(`active-p${p}`);
-    document.getElementById(`pv-${s}-${p}`).classList.add('visible');
-  }
+  if (btn.disabled) return;
+  const s = btn.dataset.size, p = parseInt(btn.dataset.p);
+  if (activePercentiles[s].has(p)) { activePercentiles[s].delete(p); } else { activePercentiles[s].add(p); }
+  renderPercentileControls();
   drawChart();
 }
 
-// Chart
+// ── RANGE FILTER ──
+function setRange(btn) {
+  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  rangeMonths = parseInt(btn.dataset.months);
+  updateRangeInfo();
+  fullRefresh();
+}
+
+function updateRangeInfo() {
+  const filtered = getFilteredData();
+  if (rangeMonths === 0) {
+    document.getElementById('rangeInfo').textContent = '';
+  } else {
+    const maxD = new Date(Math.max(...data.map(d => new Date(d.date))));
+    const cutoff = new Date(maxD);
+    cutoff.setMonth(cutoff.getMonth() - rangeMonths);
+    document.getElementById('rangeInfo').textContent = `od ${fmtDate(cutoff)} → ${filtered.length} elem.`;
+  }
+}
+
+// ── ADD POINT ──
+function addPoint() {
+  const dateVal = document.getElementById('addDate').value;
+  const sizeVal = document.getElementById('addSize').value;
+  const ltVal = parseInt(document.getElementById('addLT').value);
+  if (!dateVal || !sizeVal || isNaN(ltVal) || ltVal < 1) return;
+  data.push({ date: dateVal, size: sizeVal, lt: ltVal });
+  data.sort((a, b) => new Date(a.date) - new Date(b.date));
+  document.getElementById('addDate').value = '';
+  document.getElementById('addLT').value = '';
+  fullRefresh();
+}
+
+// ── DELETE MODE ──
+function toggleDeleteMode() {
+  deleteMode = !deleteMode;
+  const btn = document.getElementById('btnDeleteMode');
+  const hint = document.getElementById('deleteHint');
+  btn.classList.toggle('active', deleteMode);
+  hint.classList.toggle('visible', deleteMode);
+  drawChart();
+}
+
+function cancelDelete() {
+  document.getElementById('deleteOverlay').classList.remove('visible');
+  pendingDeleteIdx = -1;
+}
+
+function confirmDelete() {
+  if (pendingDeleteIdx >= 0 && pendingDeleteIdx < data.length) {
+    data.splice(pendingDeleteIdx, 1);
+  }
+  pendingDeleteIdx = -1;
+  document.getElementById('deleteOverlay').classList.remove('visible');
+  fullRefresh();
+}
+
+// ── CHART ──
 const canvas = document.getElementById('chart');
 const ctx = canvas.getContext('2d');
-const tooltip = document.getElementById('tooltip');
-
-const dates = RAW_DATA.map(d => new Date(d.date));
-const minDate = new Date(Math.min(...dates));
-const maxDate = new Date(Math.max(...dates));
-const maxLT = Math.max(...allLTs);
-
+const tooltipEl = document.getElementById('tooltip');
 const PADDING = { top: 20, right: 30, bottom: 60, left: 60 };
 
 function resize() {
@@ -577,189 +483,201 @@ function resize() {
 
 function getPlotArea() {
   const rect = canvas.getBoundingClientRect();
-  return {
-    x: PADDING.left,
-    y: PADDING.top,
-    w: rect.width - PADDING.left - PADDING.right,
-    h: rect.height - PADDING.top - PADDING.bottom,
-  };
+  return { x: PADDING.left, y: PADDING.top, w: rect.width - PADDING.left - PADDING.right, h: rect.height - PADDING.top - PADDING.bottom };
+}
+
+let chartMinDate, chartMaxDate, chartMaxLT;
+
+function computeChartBounds() {
+  if (!data.length) { chartMinDate = new Date(); chartMaxDate = new Date(); chartMaxLT = 100; return; }
+  const dates = data.map(d => new Date(d.date));
+  chartMinDate = new Date(Math.min(...dates));
+  chartMaxDate = new Date(Math.max(...dates));
+  chartMaxLT = Math.max(...data.map(d => d.lt));
 }
 
 function dateToX(d) {
   const area = getPlotArea();
-  const range = maxDate - minDate;
+  const range = chartMaxDate - chartMinDate || 1;
   const margin = range * 0.03;
-  return area.x + ((d - minDate + margin) / (range + 2 * margin)) * area.w;
+  return area.x + ((d - chartMinDate + margin) / (range + 2 * margin)) * area.w;
 }
 
 function ltToY(v) {
   const area = getPlotArea();
-  const yMax = Math.ceil(maxLT / 50) * 50 + 20;
+  const yMax = Math.ceil(chartMaxLT / 50) * 50 + 20;
   return area.y + area.h - (v / yMax) * area.h;
 }
 
+const var_ninja_orange = '#E85D26';
+
 function drawChart() {
+  if (!data.length) return;
   resize();
+  computeChartBounds();
   const rect = canvas.getBoundingClientRect();
   const area = getPlotArea();
-  const yMax = Math.ceil(maxLT / 50) * 50 + 20;
+  const yMax = Math.ceil(chartMaxLT / 50) * 50 + 20;
+  const filtered = getFilteredData();
+  const sd = computeSizePercentiles();
 
   ctx.clearRect(0, 0, rect.width, rect.height);
 
-  // Grid lines
+  // Grid
   const yTicks = [];
   for (let v = 0; v <= yMax; v += 50) yTicks.push(v);
+  ctx.strokeStyle = '#E8E6E0'; ctx.lineWidth = 1;
+  yTicks.forEach(v => { const y = ltToY(v); ctx.beginPath(); ctx.moveTo(area.x, y); ctx.lineTo(area.x + area.w, y); ctx.stroke(); });
 
-  ctx.strokeStyle = '#E8E6E0';
-  ctx.lineWidth = 1;
-  yTicks.forEach(v => {
-    const y = ltToY(v);
-    ctx.beginPath();
-    ctx.moveTo(area.x, y);
-    ctx.lineTo(area.x + area.w, y);
-    ctx.stroke();
-  });
+  // Y labels
+  ctx.fillStyle = '#9C9890'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  yTicks.forEach(v => ctx.fillText(v, area.x - 10, ltToY(v)));
 
-  // Y axis labels
-  ctx.fillStyle = '#9C9890';
-  ctx.font = '11px JetBrains Mono, monospace';
-  ctx.textAlign = 'right';
-  ctx.textBaseline = 'middle';
-  yTicks.forEach(v => {
-    ctx.fillText(v, area.x - 10, ltToY(v));
-  });
-
-  // X axis labels - months
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'top';
-  const monthNames = ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'];
-  const usedMonths = new Set();
-
-  RAW_DATA.forEach(d => {
+  // X month lines
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  const usedM = new Set();
+  data.forEach(d => {
     const dt = new Date(d.date);
     const key = `${dt.getFullYear()}-${dt.getMonth()}`;
-    if (!usedMonths.has(key)) {
-      usedMonths.add(key);
-      const firstOfMonth = new Date(dt.getFullYear(), dt.getMonth(), 1);
-      const x = dateToX(firstOfMonth);
+    if (!usedM.has(key)) {
+      usedM.add(key);
+      const first = new Date(dt.getFullYear(), dt.getMonth(), 1);
+      const x = dateToX(first);
       if (x > area.x && x < area.x + area.w) {
-        ctx.fillStyle = '#D0CEC8';
-        ctx.beginPath();
-        ctx.moveTo(x, area.y);
-        ctx.lineTo(x, area.y + area.h);
-        ctx.setLineDash([3, 5]);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
+        ctx.strokeStyle = '#D0CEC8'; ctx.setLineDash([3, 5]); ctx.beginPath(); ctx.moveTo(x, area.y); ctx.lineTo(x, area.y + area.h); ctx.stroke(); ctx.setLineDash([]);
         ctx.fillStyle = '#9C9890';
-        const label = monthNames[dt.getMonth()] + (dt.getMonth() === 0 ? ` '${String(dt.getFullYear()).slice(2)}` : '');
-        ctx.fillText(label, x, area.y + area.h + 12);
+        ctx.fillText(monthNames[dt.getMonth()] + (dt.getMonth() === 0 ? ` '${String(dt.getFullYear()).slice(2)}` : ''), x, area.y + area.h + 12);
       }
     }
   });
 
-  // Y axis title
-  ctx.save();
-  ctx.translate(16, area.y + area.h / 2);
-  ctx.rotate(-Math.PI / 2);
-  ctx.textAlign = 'center';
-  ctx.fillStyle = '#9C9890';
-  ctx.font = '12px Space Grotesk, sans-serif';
-  ctx.fillText('Czas realizacji (dni)', 0, 0);
-  ctx.restore();
+  // Y title
+  ctx.save(); ctx.translate(16, area.y + area.h / 2); ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = 'center'; ctx.fillStyle = '#9C9890'; ctx.font = '12px Space Grotesk, sans-serif';
+  ctx.fillText('Czas realizacji (dni)', 0, 0); ctx.restore();
 
-  // Percentile lines
-  ['S', 'M', 'L'].forEach(s => {
-    activePercentiles[s].forEach(p => {
-      const val = sizeData[s][`p${p}`];
-      const y = ltToY(val);
-      const pc = PCOLORS[p];
-      ctx.strokeStyle = COLORS[s].fill;
-      ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.7;
-      ctx.setLineDash(pc.dash);
-      ctx.beginPath();
-      ctx.moveTo(area.x, y);
-      ctx.lineTo(area.x + area.w, y);
-      ctx.stroke();
+  // Range shading — dim out-of-range area
+  if (rangeMonths > 0 && filtered.length < data.length) {
+    const cutoffDate = new Date(chartMaxDate);
+    cutoffDate.setMonth(cutoffDate.getMonth() - rangeMonths);
+    const cutX = dateToX(cutoffDate);
+    if (cutX > area.x) {
+      ctx.fillStyle = 'rgba(245,244,240,0.7)';
+      ctx.fillRect(area.x, area.y, cutX - area.x, area.h);
+      // Vertical cutoff line
+      ctx.strokeStyle = var_ninja_orange; ctx.lineWidth = 2; ctx.setLineDash([6,4]);
+      ctx.beginPath(); ctx.moveTo(cutX, area.y); ctx.lineTo(cutX, area.y + area.h); ctx.stroke();
       ctx.setLineDash([]);
-      ctx.globalAlpha = 1;
+      ctx.fillStyle = var_ninja_orange; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillText('← poza zakresem', cutX + 6, area.y + 4);
+    }
+  }
 
-      // Label
-      ctx.fillStyle = COLORS[s].fill;
-      ctx.font = 'bold 11px JetBrains Mono, monospace';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'bottom';
-      ctx.fillText(`${s} P${p}: ${val}`, area.x + area.w + 4 > rect.width - 10 ? area.x + 5 : area.x + 5, y - 4);
+  // Percentile lines (based on filtered data)
+  const pLabelOffsets = {};
+  ['S','M','L'].forEach(s => {
+    activePercentiles[s].forEach(p => {
+      const val = sd[s][`p${p}`];
+      if (val === null) return;
+      const y = ltToY(val);
+      const key = Math.round(y);
+      let offset = 0;
+      while (pLabelOffsets[key + offset]) offset -= 14;
+      pLabelOffsets[key + offset] = true;
+
+      ctx.strokeStyle = COLORS[s].fill; ctx.lineWidth = 2; ctx.globalAlpha = 0.65;
+      ctx.setLineDash(PCOLORS[p].dash); ctx.beginPath(); ctx.moveTo(area.x, y); ctx.lineTo(area.x + area.w, y); ctx.stroke();
+      ctx.setLineDash([]); ctx.globalAlpha = 1;
+      ctx.fillStyle = COLORS[s].fill; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      ctx.fillText(`${s} P${p}: ${val}`, area.x + 5, y - 4 + offset);
     });
   });
 
-  // Data points
-  RAW_DATA.forEach((d, i) => {
+  // Data points — all shown, but out-of-range dimmed
+  const filteredSet = new Set(filtered);
+  data.forEach((d, i) => {
     const dt = new Date(d.date);
     const x = dateToX(dt);
     const y = ltToY(d.lt);
     const c = COLORS[d.size];
     const r = d.size === 'S' ? 6 : d.size === 'M' ? 8 : 10;
+    const inRange = filteredSet.has(d);
 
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fillStyle = c.bg;
-    ctx.fill();
-    ctx.strokeStyle = c.stroke;
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    ctx.globalAlpha = inRange ? 1 : 0.25;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = c.bg; ctx.fill();
+    ctx.strokeStyle = deleteMode && inRange ? '#D64545' : c.stroke;
+    ctx.lineWidth = deleteMode && inRange ? 2.5 : 2; ctx.stroke();
+    ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = c.fill; ctx.fill();
+    ctx.globalAlpha = 1;
 
-    ctx.beginPath();
-    ctx.arc(x, y, 3, 0, Math.PI * 2);
-    ctx.fillStyle = c.fill;
-    ctx.fill();
-
-    d._x = x;
-    d._y = y;
-    d._r = r;
+    d._x = x; d._y = y; d._r = r; d._inRange = inRange;
   });
 }
 
-// Tooltip
+// Tooltip & click
 canvas.addEventListener('mousemove', function(e) {
   const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
-
-  let found = null;
-  let minDist = Infinity;
-  RAW_DATA.forEach(d => {
-    const dx = mx - d._x;
-    const dy = my - d._y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < d._r + 4 && dist < minDist) {
-      minDist = dist;
-      found = d;
-    }
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  let found = null, minDist = Infinity;
+  data.forEach(d => {
+    const dx = mx - d._x, dy = my - d._y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist < d._r + 4 && dist < minDist) { minDist = dist; found = d; }
   });
-
   if (found) {
     const dt = new Date(found.date);
-    const monthsPL = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
-    tooltip.innerHTML = `<strong>${found.lt} dni</strong><br>Rozmiar: ${found.size}<br>${dt.getDate()} ${monthsPL[dt.getMonth()]} ${dt.getFullYear()}`;
-    tooltip.style.opacity = 1;
-    tooltip.style.left = (found._x - tooltip.offsetWidth / 2) + 'px';
-    tooltip.style.top = (found._y - tooltip.offsetHeight - 14) + 'px';
-    canvas.style.cursor = 'pointer';
+    tooltipEl.className = 'tooltip' + (deleteMode ? ' delete-mode' : '');
+    tooltipEl.innerHTML = deleteMode
+      ? `<strong>🗑 Kliknij, aby usunąć</strong><br>${found.lt} dni | ${found.size} | ${fmtDate(found.date)}`
+      : `<strong>${found.lt} dni</strong><br>Rozmiar: ${found.size}<br>${fmtDate(found.date)}`;
+    tooltipEl.style.opacity = 1;
+    tooltipEl.style.left = (found._x - tooltipEl.offsetWidth / 2) + 'px';
+    tooltipEl.style.top = (found._y - tooltipEl.offsetHeight - 14) + 'px';
+    canvas.style.cursor = deleteMode ? 'pointer' : 'default';
   } else {
-    tooltip.style.opacity = 0;
+    tooltipEl.style.opacity = 0;
     canvas.style.cursor = 'default';
   }
 });
 
-canvas.addEventListener('mouseleave', () => {
-  tooltip.style.opacity = 0;
+canvas.addEventListener('mouseleave', () => { tooltipEl.style.opacity = 0; });
+
+canvas.addEventListener('click', function(e) {
+  if (!deleteMode) return;
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  let foundIdx = -1, minDist = Infinity;
+  data.forEach((d, i) => {
+    const dx = mx - d._x, dy = my - d._y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist < d._r + 4 && dist < minDist) { minDist = dist; foundIdx = i; }
+  });
+  if (foundIdx >= 0) {
+    const d = data[foundIdx];
+    pendingDeleteIdx = foundIdx;
+    document.getElementById('deleteMsg').innerHTML =
+      `<strong>${d.lt} dni</strong> &middot; Rozmiar ${d.size} &middot; ${fmtDate(d.date)}`;
+    document.getElementById('deleteOverlay').classList.add('visible');
+    tooltipEl.style.opacity = 0;
+  }
 });
 
-window.addEventListener('resize', drawChart);
-drawChart();
-</script>
+// ── FULL REFRESH ──
+function fullRefresh() {
+  updateStats();
+  updateRangeInfo();
+  renderPercentileControls();
+  drawChart();
+}
 
+window.addEventListener('resize', drawChart);
+
+// Set default date
+document.getElementById('addDate').valueAsDate = new Date();
+
+fullRefresh();
+</script>
 </body>
 </html>
