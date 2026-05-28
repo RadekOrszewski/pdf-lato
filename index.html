@@ -1,1 +1,765 @@
-Star Trek jest najlepszy :)
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Times Dashboard | LeanAgileNinja</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFAF8;
+    --surface: #FFFFFF;
+    --surface-alt: #F5F4F0;
+    --border: #E8E6E0;
+    --text-primary: #1A1A1A;
+    --text-secondary: #6B6960;
+    --text-muted: #9C9890;
+
+    --ninja-black: #1A1A1A;
+    --ninja-orange: #E85D26;
+    --ninja-orange-light: rgba(232, 93, 38, 0.12);
+    --ninja-red: #C0392B;
+
+    --size-s: #2EAF7D;
+    --size-s-bg: rgba(46, 175, 125, 0.15);
+    --size-s-border: rgba(46, 175, 125, 0.4);
+    --size-m: #E8902A;
+    --size-m-bg: rgba(232, 144, 42, 0.15);
+    --size-m-border: rgba(232, 144, 42, 0.4);
+    --size-l: #D64545;
+    --size-l-bg: rgba(214, 69, 69, 0.15);
+    --size-l-border: rgba(214, 69, 69, 0.4);
+
+    --p50: #2EAF7D;
+    --p85: #E8902A;
+    --p95: #D64545;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--ninja-black);
+    color: #fff;
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo-mark {
+    width: 42px;
+    height: 42px;
+    background: var(--ninja-orange);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: #fff;
+    letter-spacing: -1px;
+  }
+
+  .header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+
+  .header h1 span {
+    color: var(--ninja-orange);
+  }
+
+  .header-right {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 40px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+
+  .stat-card .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .stat-card .value {
+    font-size: 32px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -1px;
+  }
+
+  .stat-card .unit {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    margin-left: 4px;
+  }
+
+  .chart-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .chart-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .chart-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  .chart-header p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .chart-area {
+    position: relative;
+    width: 100%;
+    height: 460px;
+    overflow: visible;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .controls-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+  }
+
+  .controls-section h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .controls-section h3::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 18px;
+    background: var(--ninja-orange);
+    border-radius: 2px;
+  }
+
+  .percentile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .percentile-group {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    background: var(--surface-alt);
+  }
+
+  .percentile-group-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .percentile-group-title .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .percentile-toggles {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ptoggle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .ptoggle:hover {
+    border-color: var(--text-muted);
+  }
+
+  .ptoggle.active-p50 {
+    border-color: var(--p50);
+    background: rgba(46, 175, 125, 0.08);
+    color: var(--p50);
+  }
+
+  .ptoggle.active-p85 {
+    border-color: var(--p85);
+    background: rgba(232, 144, 42, 0.08);
+    color: var(--p85);
+  }
+
+  .ptoggle.active-p95 {
+    border-color: var(--p95);
+    background: rgba(214, 69, 69, 0.08);
+    color: var(--p95);
+  }
+
+  .percentile-values {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .pval {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    display: none;
+    font-weight: 500;
+  }
+
+  .pval.visible {
+    display: inline-block;
+  }
+
+  .pval-p50 {
+    background: rgba(46, 175, 125, 0.12);
+    color: var(--p50);
+  }
+
+  .pval-p85 {
+    background: rgba(232, 144, 42, 0.12);
+    color: var(--p85);
+  }
+
+  .pval-p95 {
+    background: rgba(214, 69, 69, 0.12);
+    color: var(--p95);
+  }
+
+  .tooltip {
+    position: absolute;
+    background: var(--ninja-black);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 100;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--ninja-black);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 24px 40px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .footer a {
+    color: var(--ninja-orange);
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .header { padding: 20px 20px; }
+    .main { padding: 20px; }
+    .chart-container { padding: 20px; }
+    .chart-area { height: 340px; }
+    .controls-section { padding: 20px; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo-mark">忍</div>
+    <h1>Lead Times <span>Dashboard</span></h1>
+  </div>
+  <div class="header-right">leanagile.ninja &middot; 2024/25</div>
+</div>
+
+<div class="main">
+
+  <div class="stats-row" id="statsRow"></div>
+
+  <div class="controls-section">
+    <h3>Linie percentylowe</h3>
+    <div class="percentile-grid" id="percentileGrid"></div>
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-header">
+      <div>
+        <h2>Czasy realizacji &mdash; Scatterplot</h2>
+        <p>Oś X: data ukończenia &nbsp;|&nbsp; Oś Y: czas realizacji (dni)</p>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--size-s)"></div>S &mdash; Small</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--size-m)"></div>M &mdash; Medium</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--size-l)"></div>L &mdash; Large</div>
+      </div>
+    </div>
+    <div class="chart-area">
+      <canvas id="chart"></canvas>
+      <div class="tooltip" id="tooltip"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Built for <a href="https://www.leanagile.ninja" target="_blank">LeanAgileNinja</a> &middot; Kanban Lead Time Analysis
+</div>
+
+<script>
+const RAW_DATA = [
+  { date: '2024-07-15', size: 'S', lt: 49 },
+  { date: '2024-08-22', size: 'S', lt: 48 },
+  { date: '2024-09-10', size: 'S', lt: 87 },
+  { date: '2024-09-25', size: 'M', lt: 57 },
+  { date: '2024-10-05', size: 'M', lt: 148 },
+  { date: '2024-10-14', size: 'S', lt: 53 },
+  { date: '2024-10-28', size: 'S', lt: 45 },
+  { date: '2024-11-18', size: 'M', lt: 145 },
+  { date: '2024-12-04', size: 'L', lt: 105 },
+  { date: '2025-01-08', size: 'S', lt: 5 },
+  { date: '2025-01-20', size: 'L', lt: 163 },
+  { date: '2025-02-14', size: 'S', lt: 43 },
+  { date: '2025-02-26', size: 'M', lt: 415 },
+  { date: '2025-03-15', size: 'L', lt: 123 },
+  { date: '2025-04-10', size: 'M', lt: 103 },
+  { date: '2025-05-05', size: 'L', lt: 104 },
+  { date: '2025-06-12', size: 'L', lt: 302 },
+  { date: '2025-06-25', size: 'L', lt: 158 },
+  { date: '2025-07-02', size: 'L', lt: 98 },
+  { date: '2025-07-11', size: 'S', lt: 52 },
+  { date: '2025-07-18', size: 'M', lt: 95 },
+  { date: '2025-07-29', size: 'S', lt: 70 },
+  { date: '2025-08-03', size: 'M', lt: 95 },
+  { date: '2025-08-14', size: 'M', lt: 101 },
+  { date: '2025-08-21', size: 'M', lt: 57 },
+  { date: '2025-08-29', size: 'M', lt: 57 },
+  { date: '2025-09-08', size: 'S', lt: 53 },
+  { date: '2025-09-22', size: 'L', lt: 137 },
+  { date: '2025-10-04', size: 'S', lt: 73 },
+  { date: '2025-10-12', size: 'M', lt: 60 },
+  { date: '2025-10-19', size: 'S', lt: 126 },
+  { date: '2025-10-27', size: 'M', lt: 57 },
+  { date: '2025-11-05', size: 'L', lt: 124 },
+  { date: '2025-11-15', size: 'M', lt: 75 },
+  { date: '2025-11-25', size: 'M', lt: 89 },
+  { date: '2025-12-10', size: 'S', lt: 44 },
+];
+
+const COLORS = {
+  S: { fill: '#2EAF7D', bg: 'rgba(46,175,125,0.18)', stroke: 'rgba(46,175,125,0.6)' },
+  M: { fill: '#E8902A', bg: 'rgba(232,144,42,0.18)', stroke: 'rgba(232,144,42,0.6)' },
+  L: { fill: '#D64545', bg: 'rgba(214,69,69,0.18)', stroke: 'rgba(214,69,69,0.6)' },
+};
+
+const PCOLORS = {
+  50: { line: '#2EAF7D', dash: [] },
+  85: { line: '#E8902A', dash: [8, 4] },
+  95: { line: '#D64545', dash: [4, 4] },
+};
+
+function percentile(arr, p) {
+  const sorted = [...arr].sort((a, b) => a - b);
+  const idx = (p / 100) * (sorted.length - 1);
+  const lo = Math.floor(idx);
+  const hi = Math.ceil(idx);
+  if (lo === hi) return sorted[lo];
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
+}
+
+// State
+const activePercentiles = { S: new Set(), M: new Set(), L: new Set() };
+
+// Compute percentiles per size
+const sizeData = {};
+['S', 'M', 'L'].forEach(s => {
+  const vals = RAW_DATA.filter(d => d.size === s).map(d => d.lt);
+  sizeData[s] = {
+    count: vals.length,
+    p50: Math.round(percentile(vals, 50)),
+    p85: Math.round(percentile(vals, 85)),
+    p95: Math.round(percentile(vals, 95)),
+    min: Math.min(...vals),
+    max: Math.max(...vals),
+    avg: Math.round(vals.reduce((a, b) => a + b, 0) / vals.length),
+  };
+});
+
+// Stats row
+const allLTs = RAW_DATA.map(d => d.lt);
+const statsHTML = [
+  { label: 'Elementy', value: RAW_DATA.length, unit: '' },
+  { label: 'Średni LT', value: Math.round(allLTs.reduce((a, b) => a + b, 0) / allLTs.length), unit: 'dni' },
+  { label: 'Mediana LT', value: Math.round(percentile(allLTs, 50)), unit: 'dni' },
+  { label: 'Min / Max', value: `${Math.min(...allLTs)} / ${Math.max(...allLTs)}`, unit: 'dni' },
+].map(s => `
+  <div class="stat-card">
+    <div class="label">${s.label}</div>
+    <div class="value">${s.value}<span class="unit">${s.unit}</span></div>
+  </div>
+`).join('');
+document.getElementById('statsRow').innerHTML = statsHTML;
+
+// Percentile controls
+const sizeLabels = { S: 'Small (S)', M: 'Medium (M)', L: 'Large (L)' };
+document.getElementById('percentileGrid').innerHTML = ['S', 'M', 'L'].map(s => {
+  const d = sizeData[s];
+  return `
+    <div class="percentile-group">
+      <div class="percentile-group-title">
+        <div class="dot" style="background:${COLORS[s].fill}"></div>
+        ${sizeLabels[s]} &mdash; ${d.count} elementów
+      </div>
+      <div class="percentile-toggles">
+        <button class="ptoggle" data-size="${s}" data-p="50" onclick="toggleP(this)">P50</button>
+        <button class="ptoggle" data-size="${s}" data-p="85" onclick="toggleP(this)">P85</button>
+        <button class="ptoggle" data-size="${s}" data-p="95" onclick="toggleP(this)">P95</button>
+      </div>
+      <div class="percentile-values" id="pvals-${s}">
+        <span class="pval pval-p50" id="pv-${s}-50">P50 = ${d.p50} dni</span>
+        <span class="pval pval-p85" id="pv-${s}-85">P85 = ${d.p85} dni</span>
+        <span class="pval pval-p95" id="pv-${s}-95">P95 = ${d.p95} dni</span>
+      </div>
+    </div>
+  `;
+}).join('');
+
+function toggleP(btn) {
+  const s = btn.dataset.size;
+  const p = parseInt(btn.dataset.p);
+  if (activePercentiles[s].has(p)) {
+    activePercentiles[s].delete(p);
+    btn.classList.remove(`active-p${p}`);
+    document.getElementById(`pv-${s}-${p}`).classList.remove('visible');
+  } else {
+    activePercentiles[s].add(p);
+    btn.classList.add(`active-p${p}`);
+    document.getElementById(`pv-${s}-${p}`).classList.add('visible');
+  }
+  drawChart();
+}
+
+// Chart
+const canvas = document.getElementById('chart');
+const ctx = canvas.getContext('2d');
+const tooltip = document.getElementById('tooltip');
+
+const dates = RAW_DATA.map(d => new Date(d.date));
+const minDate = new Date(Math.min(...dates));
+const maxDate = new Date(Math.max(...dates));
+const maxLT = Math.max(...allLTs);
+
+const PADDING = { top: 20, right: 30, bottom: 60, left: 60 };
+
+function resize() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function getPlotArea() {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: PADDING.left,
+    y: PADDING.top,
+    w: rect.width - PADDING.left - PADDING.right,
+    h: rect.height - PADDING.top - PADDING.bottom,
+  };
+}
+
+function dateToX(d) {
+  const area = getPlotArea();
+  const range = maxDate - minDate;
+  const margin = range * 0.03;
+  return area.x + ((d - minDate + margin) / (range + 2 * margin)) * area.w;
+}
+
+function ltToY(v) {
+  const area = getPlotArea();
+  const yMax = Math.ceil(maxLT / 50) * 50 + 20;
+  return area.y + area.h - (v / yMax) * area.h;
+}
+
+function drawChart() {
+  resize();
+  const rect = canvas.getBoundingClientRect();
+  const area = getPlotArea();
+  const yMax = Math.ceil(maxLT / 50) * 50 + 20;
+
+  ctx.clearRect(0, 0, rect.width, rect.height);
+
+  // Grid lines
+  const yTicks = [];
+  for (let v = 0; v <= yMax; v += 50) yTicks.push(v);
+
+  ctx.strokeStyle = '#E8E6E0';
+  ctx.lineWidth = 1;
+  yTicks.forEach(v => {
+    const y = ltToY(v);
+    ctx.beginPath();
+    ctx.moveTo(area.x, y);
+    ctx.lineTo(area.x + area.w, y);
+    ctx.stroke();
+  });
+
+  // Y axis labels
+  ctx.fillStyle = '#9C9890';
+  ctx.font = '11px JetBrains Mono, monospace';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  yTicks.forEach(v => {
+    ctx.fillText(v, area.x - 10, ltToY(v));
+  });
+
+  // X axis labels - months
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  const monthNames = ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'];
+  const usedMonths = new Set();
+
+  RAW_DATA.forEach(d => {
+    const dt = new Date(d.date);
+    const key = `${dt.getFullYear()}-${dt.getMonth()}`;
+    if (!usedMonths.has(key)) {
+      usedMonths.add(key);
+      const firstOfMonth = new Date(dt.getFullYear(), dt.getMonth(), 1);
+      const x = dateToX(firstOfMonth);
+      if (x > area.x && x < area.x + area.w) {
+        ctx.fillStyle = '#D0CEC8';
+        ctx.beginPath();
+        ctx.moveTo(x, area.y);
+        ctx.lineTo(x, area.y + area.h);
+        ctx.setLineDash([3, 5]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = '#9C9890';
+        const label = monthNames[dt.getMonth()] + (dt.getMonth() === 0 ? ` '${String(dt.getFullYear()).slice(2)}` : '');
+        ctx.fillText(label, x, area.y + area.h + 12);
+      }
+    }
+  });
+
+  // Y axis title
+  ctx.save();
+  ctx.translate(16, area.y + area.h / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#9C9890';
+  ctx.font = '12px Space Grotesk, sans-serif';
+  ctx.fillText('Czas realizacji (dni)', 0, 0);
+  ctx.restore();
+
+  // Percentile lines
+  ['S', 'M', 'L'].forEach(s => {
+    activePercentiles[s].forEach(p => {
+      const val = sizeData[s][`p${p}`];
+      const y = ltToY(val);
+      const pc = PCOLORS[p];
+      ctx.strokeStyle = COLORS[s].fill;
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.7;
+      ctx.setLineDash(pc.dash);
+      ctx.beginPath();
+      ctx.moveTo(area.x, y);
+      ctx.lineTo(area.x + area.w, y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
+
+      // Label
+      ctx.fillStyle = COLORS[s].fill;
+      ctx.font = 'bold 11px JetBrains Mono, monospace';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(`${s} P${p}: ${val}`, area.x + area.w + 4 > rect.width - 10 ? area.x + 5 : area.x + 5, y - 4);
+    });
+  });
+
+  // Data points
+  RAW_DATA.forEach((d, i) => {
+    const dt = new Date(d.date);
+    const x = dateToX(dt);
+    const y = ltToY(d.lt);
+    const c = COLORS[d.size];
+    const r = d.size === 'S' ? 6 : d.size === 'M' ? 8 : 10;
+
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = c.bg;
+    ctx.fill();
+    ctx.strokeStyle = c.stroke;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = c.fill;
+    ctx.fill();
+
+    d._x = x;
+    d._y = y;
+    d._r = r;
+  });
+}
+
+// Tooltip
+canvas.addEventListener('mousemove', function(e) {
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+
+  let found = null;
+  let minDist = Infinity;
+  RAW_DATA.forEach(d => {
+    const dx = mx - d._x;
+    const dy = my - d._y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < d._r + 4 && dist < minDist) {
+      minDist = dist;
+      found = d;
+    }
+  });
+
+  if (found) {
+    const dt = new Date(found.date);
+    const monthsPL = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
+    tooltip.innerHTML = `<strong>${found.lt} dni</strong><br>Rozmiar: ${found.size}<br>${dt.getDate()} ${monthsPL[dt.getMonth()]} ${dt.getFullYear()}`;
+    tooltip.style.opacity = 1;
+    tooltip.style.left = (found._x - tooltip.offsetWidth / 2) + 'px';
+    tooltip.style.top = (found._y - tooltip.offsetHeight - 14) + 'px';
+    canvas.style.cursor = 'pointer';
+  } else {
+    tooltip.style.opacity = 0;
+    canvas.style.cursor = 'default';
+  }
+});
+
+canvas.addEventListener('mouseleave', () => {
+  tooltip.style.opacity = 0;
+});
+
+window.addEventListener('resize', drawChart);
+drawChart();
+</script>
+
+</body>
+</html>
