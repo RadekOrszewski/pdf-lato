@@ -7,146 +7,128 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #FAFAF8;
-    --surface: #FFFFFF;
-    --surface-alt: #F5F4F0;
-    --border: #E8E6E0;
-    --text-primary: #1A1A1A;
-    --text-secondary: #6B6960;
-    --text-muted: #9C9890;
-    --ninja-black: #1A1A1A;
-    --ninja-orange: #E85D26;
-    --ninja-orange-light: rgba(232, 93, 38, 0.12);
-    --ninja-red: #C0392B;
-    --size-s: #2EAF7D;
-    --size-m: #E8902A;
-    --size-l: #D64545;
-    --p50: #2EAF7D;
-    --p85: #E8902A;
-    --p95: #D64545;
-    --danger: #D64545;
-    --danger-bg: rgba(214,69,69,0.08);
+    --bg: #FAFAF8; --surface: #FFFFFF; --surface-alt: #F5F4F0;
+    --border: #E8E6E0; --text-primary: #1A1A1A; --text-secondary: #6B6960; --text-muted: #9C9890;
+    --ninja-black: #1A1A1A; --ninja-orange: #E85D26; --ninja-orange-light: rgba(232,93,38,0.12);
+    --size-s: #2EAF7D; --size-m: #E8902A; --size-l: #D64545;
+    --p50: #2EAF7D; --p85: #E8902A; --p95: #D64545;
+    --danger: #D64545; --danger-bg: rgba(214,69,69,0.08);
+    --xmr-x: #3B7DD8; --xmr-mr: #9B59B6; --xmr-avg: #E85D26; --xmr-limit: #D64545;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Space Grotesk',sans-serif; background:var(--bg); color:var(--text-primary); min-height:100vh; }
 
-  .header { background: var(--ninja-black); color: #fff; padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-  .header-left { display: flex; align-items: center; gap: 16px; }
-  .logo-mark { width: 42px; height: 42px; background: var(--ninja-orange); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #fff; }
-  .header h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
-  .header h1 span { color: var(--ninja-orange); }
-  .header-right { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.5); }
+  .header { background:var(--ninja-black); color:#fff; padding:28px 40px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+  .header-left { display:flex; align-items:center; gap:16px; }
+  .logo-mark { width:42px; height:42px; background:var(--ninja-orange); border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px; color:#fff; }
+  .header h1 { font-size:22px; font-weight:600; letter-spacing:-0.5px; }
+  .header h1 span { color:var(--ninja-orange); }
+  .header-right { font-family:'JetBrains Mono',monospace; font-size:12px; color:rgba(255,255,255,0.5); }
 
-  .main { max-width: 1280px; margin: 0 auto; padding: 32px 40px; }
+  /* TABS */
+  .tab-bar { background:var(--ninja-black); padding:0 40px; display:flex; gap:0; border-top:1px solid rgba(255,255,255,0.08); }
+  .tab-btn { font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; padding:14px 28px; background:none; color:rgba(255,255,255,0.45); border:none; cursor:pointer; position:relative; transition:color 0.2s; }
+  .tab-btn:hover { color:rgba(255,255,255,0.7); }
+  .tab-btn.active { color:#fff; }
+  .tab-btn.active::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:var(--ninja-orange); border-radius:3px 3px 0 0; }
+  .tab-page { display:none; }
+  .tab-page.active { display:block; }
 
-  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
-  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; }
-  .stat-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 5px; }
-  .stat-card .value { font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: -1px; }
-  .stat-card .unit { font-size: 13px; font-weight: 400; color: var(--text-secondary); margin-left: 4px; }
+  .main { max-width:1280px; margin:0 auto; padding:32px 40px; }
 
-  .section-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
-  .section-title { font-size: 15px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-  .section-title::before { content: ''; display: block; width: 4px; height: 18px; background: var(--ninja-orange); border-radius: 2px; }
+  .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-bottom:26px; }
+  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px 20px; }
+  .stat-card .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:4px; }
+  .stat-card .value { font-size:26px; font-weight:700; font-family:'JetBrains Mono',monospace; letter-spacing:-1px; }
+  .stat-card .unit { font-size:12px; font-weight:400; color:var(--text-secondary); margin-left:3px; }
 
-  /* Time range filter */
-  .range-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
-  .range-btn { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 16px; border-radius: 8px; border: 2px solid var(--border); background: var(--surface); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; }
-  .range-btn:hover { border-color: var(--text-muted); }
-  .range-btn.active { border-color: var(--ninja-orange); background: var(--ninja-orange-light); color: var(--ninja-orange); font-weight: 600; }
-  .range-info { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-left: 8px; display: flex; align-items: center; }
+  .section-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:28px 32px; margin-bottom:24px; }
+  .section-title { font-size:15px; font-weight:600; margin-bottom:20px; display:flex; align-items:center; gap:8px; }
+  .section-title::before { content:''; display:block; width:4px; height:18px; background:var(--ninja-orange); border-radius:2px; }
 
-  /* Add form */
-  .add-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
-  .add-form .field { display: flex; flex-direction: column; gap: 4px; }
-  .add-form label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); font-weight: 500; }
-  .add-form input, .add-form select {
-    font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 8px 12px;
-    border: 2px solid var(--border); border-radius: 8px; background: var(--surface-alt);
-    color: var(--text-primary); outline: none; transition: border-color 0.2s;
-  }
-  .add-form input:focus, .add-form select:focus { border-color: var(--ninja-orange); }
-  .add-form input[type="date"] { min-width: 150px; }
-  .add-form input[type="number"] { width: 90px; }
-  .btn-add {
-    font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600;
-    padding: 8px 20px; border-radius: 8px; border: none;
-    background: var(--ninja-orange); color: #fff; cursor: pointer; transition: all 0.2s;
-    height: 38px;
-  }
-  .btn-add:hover { background: #D04E1C; }
-  .btn-add:disabled { opacity: 0.4; cursor: not-allowed; }
+  .range-bar { display:flex; gap:6px; flex-wrap:wrap; }
+  .range-btn { font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; padding:7px 16px; border-radius:8px; border:2px solid var(--border); background:var(--surface); color:var(--text-secondary); cursor:pointer; transition:all 0.2s; }
+  .range-btn:hover { border-color:var(--text-muted); }
+  .range-btn.active { border-color:var(--ninja-orange); background:var(--ninja-orange-light); color:var(--ninja-orange); font-weight:600; }
+  .range-info { font-size:12px; color:var(--text-muted); font-family:'JetBrains Mono',monospace; margin-left:8px; display:flex; align-items:center; }
 
-  /* Delete mode */
-  .delete-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .btn-delete-mode {
-    font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600;
-    padding: 8px 20px; border-radius: 8px; border: 2px solid var(--border);
-    background: var(--surface); color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
-    height: 38px;
-  }
-  .btn-delete-mode:hover { border-color: var(--danger); color: var(--danger); }
-  .btn-delete-mode.active { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
-  .delete-hint { font-size: 12px; color: var(--danger); font-style: italic; display: none; }
-  .delete-hint.visible { display: inline; }
+  .add-form { display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; }
+  .add-form .field { display:flex; flex-direction:column; gap:4px; }
+  .add-form label { font-size:11px; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); font-weight:500; }
+  .add-form input,.add-form select { font-family:'JetBrains Mono',monospace; font-size:13px; padding:8px 12px; border:2px solid var(--border); border-radius:8px; background:var(--surface-alt); color:var(--text-primary); outline:none; transition:border-color 0.2s; }
+  .add-form input:focus,.add-form select:focus { border-color:var(--ninja-orange); }
+  .add-form input[type="date"] { min-width:150px; }
+  .add-form input[type="number"] { width:90px; }
+  .btn-add { font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; padding:8px 20px; border-radius:8px; border:none; background:var(--ninja-orange); color:#fff; cursor:pointer; transition:all 0.2s; height:38px; }
+  .btn-add:hover { background:#D04E1C; }
 
-  /* Percentile grid */
-  .percentile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-  .percentile-group { border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; background: var(--surface-alt); }
-  .percentile-group-title { font-size: 14px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
-  .percentile-group-title .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .percentile-toggles { display: flex; gap: 8px; flex-wrap: wrap; }
-  .ptoggle { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: 8px; border: 2px solid var(--border); background: var(--surface); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; user-select: none; }
-  .ptoggle:hover { border-color: var(--text-muted); }
-  .ptoggle:disabled { opacity: 0.35; cursor: not-allowed; }
-  .ptoggle.active-p50 { border-color: var(--p50); background: rgba(46,175,125,0.08); color: var(--p50); }
-  .ptoggle.active-p85 { border-color: var(--p85); background: rgba(232,144,42,0.08); color: var(--p85); }
-  .ptoggle.active-p95 { border-color: var(--p95); background: rgba(214,69,69,0.08); color: var(--p95); }
-  .percentile-values { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-  .pval { font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 5px 12px; border-radius: 6px; display: none; font-weight: 500; }
-  .pval.visible { display: inline-block; }
-  .pval-p50 { background: rgba(46,175,125,0.12); color: var(--p50); }
-  .pval-p85 { background: rgba(232,144,42,0.12); color: var(--p85); }
-  .pval-p95 { background: rgba(214,69,69,0.12); color: var(--p95); }
-  .no-data-hint { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 8px; }
+  .delete-controls { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .btn-delete-mode { font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; padding:8px 20px; border-radius:8px; border:2px solid var(--border); background:var(--surface); color:var(--text-secondary); cursor:pointer; transition:all 0.2s; height:38px; }
+  .btn-delete-mode:hover { border-color:var(--danger); color:var(--danger); }
+  .btn-delete-mode.active { border-color:var(--danger); background:var(--danger-bg); color:var(--danger); }
+  .delete-hint { font-size:12px; color:var(--danger); font-style:italic; display:none; }
+  .delete-hint.visible { display:inline; }
 
-  /* Chart */
-  .chart-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
-  .chart-header h2 { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
-  .chart-header p { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
-  .legend { display: flex; gap: 20px; flex-wrap: wrap; }
-  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--text-secondary); }
-  .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
-  .chart-area { position: relative; width: 100%; height: 460px; overflow: visible; }
-  canvas { display: block; width: 100%; height: 100%; }
+  .percentile-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
+  .percentile-group { border:1px solid var(--border); border-radius:12px; padding:20px 24px; background:var(--surface-alt); }
+  .percentile-group-title { font-size:14px; font-weight:600; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+  .percentile-group-title .dot { width:10px; height:10px; border-radius:50%; }
+  .percentile-toggles { display:flex; gap:8px; flex-wrap:wrap; }
+  .ptoggle { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:500; padding:8px 16px; border-radius:8px; border:2px solid var(--border); background:var(--surface); color:var(--text-secondary); cursor:pointer; transition:all 0.2s; user-select:none; }
+  .ptoggle:hover { border-color:var(--text-muted); }
+  .ptoggle:disabled { opacity:0.35; cursor:not-allowed; }
+  .ptoggle.active-p50 { border-color:var(--p50); background:rgba(46,175,125,0.08); color:var(--p50); }
+  .ptoggle.active-p85 { border-color:var(--p85); background:rgba(232,144,42,0.08); color:var(--p85); }
+  .ptoggle.active-p95 { border-color:var(--p95); background:rgba(214,69,69,0.08); color:var(--p95); }
+  .percentile-values { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+  .pval { font-family:'JetBrains Mono',monospace; font-size:12px; padding:5px 12px; border-radius:6px; display:none; font-weight:500; }
+  .pval.visible { display:inline-block; }
+  .pval-p50 { background:rgba(46,175,125,0.12); color:var(--p50); }
+  .pval-p85 { background:rgba(232,144,42,0.12); color:var(--p85); }
+  .pval-p95 { background:rgba(214,69,69,0.12); color:var(--p95); }
+  .no-data-hint { font-size:12px; color:var(--text-muted); font-style:italic; margin-top:8px; }
 
-  .tooltip { position: absolute; background: var(--ninja-black); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-family: 'JetBrains Mono', monospace; pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 100; white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-  .tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--ninja-black); }
-  .tooltip.delete-mode { background: var(--danger); }
-  .tooltip.delete-mode::after { border-top-color: var(--danger); }
+  .chart-header { display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:24px; }
+  .chart-header h2 { font-size:18px; font-weight:600; letter-spacing:-0.3px; }
+  .chart-header p { font-size:13px; color:var(--text-secondary); margin-top:4px; }
+  .legend { display:flex; gap:16px; flex-wrap:wrap; }
+  .legend-item { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:var(--text-secondary); }
+  .legend-dot { width:12px; height:12px; border-radius:50%; }
+  .legend-line { width:24px; height:3px; border-radius:2px; }
+  .legend-line.dashed { background:repeating-linear-gradient(90deg,var(--xmr-limit) 0 6px,transparent 6px 10px); height:2px; }
 
-  .footer { text-align: center; padding: 24px 40px; font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
-  .footer a { color: var(--ninja-orange); text-decoration: none; }
+  .chart-area { position:relative; width:100%; height:460px; overflow:visible; }
+  .chart-area-tall { height:360px; }
+  canvas { display:block; width:100%; height:100%; }
 
-  /* Confirm dialog */
-  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; }
-  .overlay.visible { display: flex; }
-  .dialog { background: var(--surface); border-radius: 16px; padding: 32px; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-  .dialog h3 { font-size: 16px; margin-bottom: 12px; }
-  .dialog p { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5; }
-  .dialog-btns { display: flex; gap: 10px; justify-content: flex-end; }
-  .dialog-btns button { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 20px; border-radius: 8px; cursor: pointer; border: none; transition: all 0.15s; }
-  .btn-cancel { background: var(--surface-alt); color: var(--text-secondary); border: 1px solid var(--border) !important; }
-  .btn-cancel:hover { background: var(--border); }
-  .btn-confirm-delete { background: var(--danger); color: #fff; }
-  .btn-confirm-delete:hover { background: #B83A3A; }
+  .tooltip { position:absolute; background:var(--ninja-black); color:#fff; padding:10px 14px; border-radius:8px; font-size:12px; font-family:'JetBrains Mono',monospace; pointer-events:none; opacity:0; transition:opacity 0.15s; z-index:100; white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,0.2); }
+  .tooltip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:6px solid transparent; border-top-color:var(--ninja-black); }
+  .tooltip.delete-mode { background:var(--danger); }
+  .tooltip.delete-mode::after { border-top-color:var(--danger); }
 
-  @media (max-width: 768px) {
-    .header { padding: 20px; }
-    .main { padding: 20px; }
-    .section-card { padding: 20px; }
-    .chart-area { height: 340px; }
-    .stats-row { grid-template-columns: 1fr 1fr; }
+  .footer { text-align:center; padding:24px 40px; font-size:12px; color:var(--text-muted); font-family:'JetBrains Mono',monospace; }
+  .footer a { color:var(--ninja-orange); text-decoration:none; }
+
+  .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:200; align-items:center; justify-content:center; }
+  .overlay.visible { display:flex; }
+  .dialog { background:var(--surface); border-radius:16px; padding:32px; max-width:400px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.2); }
+  .dialog h3 { font-size:16px; margin-bottom:12px; }
+  .dialog p { font-size:14px; color:var(--text-secondary); margin-bottom:20px; line-height:1.5; }
+  .dialog-btns { display:flex; gap:10px; justify-content:flex-end; }
+  .dialog-btns button { font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; padding:8px 20px; border-radius:8px; cursor:pointer; border:none; transition:all 0.15s; }
+  .btn-cancel { background:var(--surface-alt); color:var(--text-secondary); border:1px solid var(--border)!important; }
+  .btn-cancel:hover { background:var(--border); }
+  .btn-confirm-delete { background:var(--danger); color:#fff; }
+  .btn-confirm-delete:hover { background:#B83A3A; }
+
+  @media(max-width:768px) {
+    .header,.tab-bar { padding-left:20px; padding-right:20px; }
+    .main { padding:20px; }
+    .section-card { padding:20px; }
+    .chart-area { height:340px; }
+    .chart-area-tall { height:300px; }
+    .stats-row { grid-template-columns:1fr 1fr; }
+    .tab-btn { padding:12px 16px; font-size:13px; }
   }
 </style>
 </head>
@@ -160,38 +142,29 @@
   <div class="header-right">leanagile.ninja &middot; 2024/25</div>
 </div>
 
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('scatter')">Scatterplot &mdash; Lead Times</button>
+  <button class="tab-btn" onclick="switchTab('xmr')">XmR &mdash; Throughput</button>
+</div>
+
+<!-- ═══════════════ TAB 1: SCATTERPLOT ═══════════════ -->
+<div class="tab-page active" id="page-scatter">
 <div class="main">
-
   <div class="stats-row" id="statsRow"></div>
-
-  <!-- Data management -->
   <div class="section-card">
     <div class="section-title">Zarządzanie danymi</div>
-    <div style="display:flex; flex-direction:column; gap:20px;">
+    <div style="display:flex;flex-direction:column;gap:20px;">
       <div>
-        <div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:10px;">Dodaj element</div>
-        <div class="add-form" id="addForm">
-          <div class="field">
-            <label>Data ukończenia</label>
-            <input type="date" id="addDate">
-          </div>
-          <div class="field">
-            <label>Rozmiar</label>
-            <select id="addSize">
-              <option value="S">S</option>
-              <option value="M" selected>M</option>
-              <option value="L">L</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Lead time (dni)</label>
-            <input type="number" id="addLT" min="1" placeholder="np. 42">
-          </div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:10px;">Dodaj element</div>
+        <div class="add-form">
+          <div class="field"><label>Data ukończenia</label><input type="date" id="addDate"></div>
+          <div class="field"><label>Rozmiar</label><select id="addSize"><option value="S">S</option><option value="M" selected>M</option><option value="L">L</option></select></div>
+          <div class="field"><label>Lead time (dni)</label><input type="number" id="addLT" min="1" placeholder="np. 42"></div>
           <button class="btn-add" onclick="addPoint()">+ Dodaj</button>
         </div>
       </div>
       <div>
-        <div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:10px;">Usuń element</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:10px;">Usuń element</div>
         <div class="delete-controls">
           <button class="btn-delete-mode" id="btnDeleteMode" onclick="toggleDeleteMode()">🗑 Tryb usuwania</button>
           <span class="delete-hint" id="deleteHint">Kliknij punkt na wykresie, aby go usunąć</span>
@@ -199,11 +172,9 @@
       </div>
     </div>
   </div>
-
-  <!-- Time range filter -->
   <div class="section-card">
     <div class="section-title">Zakres danych do prognoz</div>
-    <div style="display:flex; align-items:center; flex-wrap:wrap; gap: 8px;">
+    <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
       <div class="range-bar" id="rangeBar">
         <button class="range-btn active" data-months="0" onclick="setRange(this)">Całość</button>
         <button class="range-btn" data-months="12" onclick="setRange(this)">12 mies.</button>
@@ -214,469 +185,367 @@
       <span class="range-info" id="rangeInfo"></span>
     </div>
   </div>
-
-  <!-- Percentiles -->
   <div class="section-card">
     <div class="section-title">Linie percentylowe</div>
     <div class="percentile-grid" id="percentileGrid"></div>
   </div>
-
-  <!-- Chart -->
   <div class="section-card" style="padding-bottom:24px;">
     <div class="chart-header">
-      <div>
-        <h2>Czasy realizacji &mdash; Scatterplot</h2>
-        <p>Oś X: data ukończenia &nbsp;|&nbsp; Oś Y: czas realizacji (dni)</p>
-      </div>
+      <div><h2>Czasy realizacji &mdash; Scatterplot</h2><p>Oś X: data ukończenia &nbsp;|&nbsp; Oś Y: czas realizacji (dni)</p></div>
       <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:var(--size-s)"></div>S</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--size-m)"></div>M</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--size-l)"></div>L</div>
       </div>
     </div>
-    <div class="chart-area">
-      <canvas id="chart"></canvas>
-      <div class="tooltip" id="tooltip"></div>
-    </div>
+    <div class="chart-area"><canvas id="chart"></canvas><div class="tooltip" id="tooltip"></div></div>
   </div>
-
+</div>
 </div>
 
-<div class="footer">
-  Built for <a href="https://www.leanagile.ninja" target="_blank">LeanAgileNinja</a> &middot; Kanban Lead Time Analysis
-</div>
-
-<!-- Delete confirmation dialog -->
-<div class="overlay" id="deleteOverlay">
-  <div class="dialog">
-    <h3>Usunąć element?</h3>
-    <p id="deleteMsg"></p>
-    <div class="dialog-btns">
-      <button class="btn-cancel" onclick="cancelDelete()">Anuluj</button>
-      <button class="btn-confirm-delete" onclick="confirmDelete()">Usuń</button>
+<!-- ═══════════════ TAB 2: XmR ═══════════════ -->
+<div class="tab-page" id="page-xmr">
+<div class="main">
+  <div class="stats-row" id="xmrStats"></div>
+  <div class="section-card" style="padding-bottom:24px;">
+    <div class="chart-header">
+      <div><h2>X Chart &mdash; Przepustowość dzienna</h2><p>Wartości indywidualne z liniami kontrolnymi (X̄, UNPL, LNPL)</p></div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-line" style="background:var(--xmr-x)"></div>Przepustowość</div>
+        <div class="legend-item"><div class="legend-line" style="background:var(--xmr-avg)"></div>X̄ (średnia)</div>
+        <div class="legend-item"><div class="legend-line dashed"></div>UNPL / LNPL</div>
+      </div>
     </div>
+    <div class="chart-area chart-area-tall"><canvas id="xChart"></canvas><div class="tooltip" id="xTooltip"></div></div>
+  </div>
+  <div class="section-card" style="padding-bottom:24px;">
+    <div class="chart-header">
+      <div><h2>mR Chart &mdash; Rozstęp ruchomy</h2><p>|X<sub>i</sub> − X<sub>i−1</sub>| z linią średnią mR̄ i UNPL<sub>mR</sub></p></div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-line" style="background:var(--xmr-mr)"></div>mR</div>
+        <div class="legend-item"><div class="legend-line" style="background:var(--xmr-avg)"></div>mR̄ (średnia)</div>
+        <div class="legend-item"><div class="legend-line dashed"></div>UNPL<sub>mR</sub></div>
+      </div>
+    </div>
+    <div class="chart-area chart-area-tall"><canvas id="mrChart"></canvas><div class="tooltip" id="mrTooltip"></div></div>
+  </div>
+</div>
+</div>
+
+<div class="footer">Built for <a href="https://www.leanagile.ninja" target="_blank">LeanAgileNinja</a> &middot; Kanban Flow Analytics</div>
+
+<div class="overlay" id="deleteOverlay">
+  <div class="dialog"><h3>Usunąć element?</h3><p id="deleteMsg"></p>
+    <div class="dialog-btns"><button class="btn-cancel" onclick="cancelDelete()">Anuluj</button><button class="btn-confirm-delete" onclick="confirmDelete()">Usuń</button></div>
   </div>
 </div>
 
 <script>
-// ── DATA ──
+// ══════════════════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════════════════
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => { b.classList.toggle('active', (id==='scatter'?i===0:i===1)); });
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if (id==='scatter') drawScatter();
+  else drawXmR();
+}
+
+// ══════════════════════════════════════════════════════
+//  SCATTER DATA & LOGIC (unchanged)
+// ══════════════════════════════════════════════════════
 let data = [
-  { date: '2024-07-15', size: 'S', lt: 49 },
-  { date: '2024-08-22', size: 'S', lt: 48 },
-  { date: '2024-09-10', size: 'S', lt: 87 },
-  { date: '2024-09-25', size: 'M', lt: 57 },
-  { date: '2024-10-05', size: 'M', lt: 148 },
-  { date: '2024-10-14', size: 'S', lt: 53 },
-  { date: '2024-10-28', size: 'S', lt: 45 },
-  { date: '2024-11-18', size: 'M', lt: 145 },
-  { date: '2024-12-04', size: 'L', lt: 105 },
-  { date: '2025-01-08', size: 'S', lt: 5 },
-  { date: '2025-01-20', size: 'L', lt: 163 },
-  { date: '2025-02-14', size: 'S', lt: 43 },
-  { date: '2025-02-26', size: 'M', lt: 415 },
-  { date: '2025-03-15', size: 'L', lt: 123 },
-  { date: '2025-04-10', size: 'M', lt: 103 },
-  { date: '2025-05-05', size: 'L', lt: 104 },
-  { date: '2025-06-12', size: 'L', lt: 302 },
-  { date: '2025-06-25', size: 'L', lt: 158 },
-  { date: '2025-07-02', size: 'L', lt: 98 },
-  { date: '2025-07-11', size: 'S', lt: 52 },
-  { date: '2025-07-18', size: 'M', lt: 95 },
-  { date: '2025-07-29', size: 'S', lt: 70 },
-  { date: '2025-08-03', size: 'M', lt: 95 },
-  { date: '2025-08-14', size: 'M', lt: 101 },
-  { date: '2025-08-21', size: 'M', lt: 57 },
-  { date: '2025-08-29', size: 'M', lt: 57 },
-  { date: '2025-09-08', size: 'S', lt: 53 },
-  { date: '2025-09-22', size: 'L', lt: 137 },
-  { date: '2025-10-04', size: 'S', lt: 73 },
-  { date: '2025-10-12', size: 'M', lt: 60 },
-  { date: '2025-10-19', size: 'S', lt: 126 },
-  { date: '2025-10-27', size: 'M', lt: 57 },
-  { date: '2025-11-05', size: 'L', lt: 124 },
-  { date: '2025-11-15', size: 'M', lt: 75 },
-  { date: '2025-11-25', size: 'M', lt: 89 },
-  { date: '2025-12-10', size: 'S', lt: 44 },
+  {date:'2024-07-15',size:'S',lt:49},{date:'2024-08-22',size:'S',lt:48},{date:'2024-09-10',size:'S',lt:87},
+  {date:'2024-09-25',size:'M',lt:57},{date:'2024-10-05',size:'M',lt:148},{date:'2024-10-14',size:'S',lt:53},
+  {date:'2024-10-28',size:'S',lt:45},{date:'2024-11-18',size:'M',lt:145},{date:'2024-12-04',size:'L',lt:105},
+  {date:'2025-01-08',size:'S',lt:5},{date:'2025-01-20',size:'L',lt:163},{date:'2025-02-14',size:'S',lt:43},
+  {date:'2025-02-26',size:'M',lt:415},{date:'2025-03-15',size:'L',lt:123},{date:'2025-04-10',size:'M',lt:103},
+  {date:'2025-05-05',size:'L',lt:104},{date:'2025-06-12',size:'L',lt:302},{date:'2025-06-25',size:'L',lt:158},
+  {date:'2025-07-02',size:'L',lt:98},{date:'2025-07-11',size:'S',lt:52},{date:'2025-07-18',size:'M',lt:95},
+  {date:'2025-07-29',size:'S',lt:70},{date:'2025-08-03',size:'M',lt:95},{date:'2025-08-14',size:'M',lt:101},
+  {date:'2025-08-21',size:'M',lt:57},{date:'2025-08-29',size:'M',lt:57},{date:'2025-09-08',size:'S',lt:53},
+  {date:'2025-09-22',size:'L',lt:137},{date:'2025-10-04',size:'S',lt:73},{date:'2025-10-12',size:'M',lt:60},
+  {date:'2025-10-19',size:'S',lt:126},{date:'2025-10-27',size:'M',lt:57},{date:'2025-11-05',size:'L',lt:124},
+  {date:'2025-11-15',size:'M',lt:75},{date:'2025-11-25',size:'M',lt:89},{date:'2025-12-10',size:'S',lt:44},
 ];
 
 const COLORS = {
-  S: { fill: '#2EAF7D', bg: 'rgba(46,175,125,0.18)', stroke: 'rgba(46,175,125,0.6)' },
-  M: { fill: '#E8902A', bg: 'rgba(232,144,42,0.18)', stroke: 'rgba(232,144,42,0.6)' },
-  L: { fill: '#D64545', bg: 'rgba(214,69,69,0.18)', stroke: 'rgba(214,69,69,0.6)' },
+  S:{fill:'#2EAF7D',bg:'rgba(46,175,125,0.18)',stroke:'rgba(46,175,125,0.6)'},
+  M:{fill:'#E8902A',bg:'rgba(232,144,42,0.18)',stroke:'rgba(232,144,42,0.6)'},
+  L:{fill:'#D64545',bg:'rgba(214,69,69,0.18)',stroke:'rgba(214,69,69,0.6)'},
 };
-const PCOLORS = { 50: { dash: [] }, 85: { dash: [8, 4] }, 95: { dash: [4, 4] } };
-const sizeLabels = { S: 'Small (S)', M: 'Medium (M)', L: 'Large (L)' };
+const PCOLORS = {50:{dash:[]},85:{dash:[8,4]},95:{dash:[4,4]}};
+const sizeLabels = {S:'Small (S)',M:'Medium (M)',L:'Large (L)'};
 const monthsPL = ['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'];
 const monthNames = ['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Paź','Lis','Gru'];
 
-// ── STATE ──
-const activePercentiles = { S: new Set(), M: new Set(), L: new Set() };
-let rangeMonths = 0; // 0 = all
-let deleteMode = false;
-let pendingDeleteIdx = -1;
+const activePercentiles = {S:new Set(),M:new Set(),L:new Set()};
+let rangeMonths=0, deleteMode=false, pendingDeleteIdx=-1;
 
-// ── HELPERS ──
-function percentile(arr, p) {
-  if (!arr.length) return 0;
-  const sorted = [...arr].sort((a, b) => a - b);
-  const idx = (p / 100) * (sorted.length - 1);
-  const lo = Math.floor(idx), hi = Math.ceil(idx);
-  return lo === hi ? sorted[lo] : sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
+function percentile(arr,p){if(!arr.length)return 0;const s=[...arr].sort((a,b)=>a-b);const i=(p/100)*(s.length-1);const lo=Math.floor(i),hi=Math.ceil(i);return lo===hi?s[lo]:s[lo]+(s[hi]-s[lo])*(i-lo);}
+function getFilteredData(){if(rangeMonths===0)return data;const mx=new Date(Math.max(...data.map(d=>new Date(d.date))));const c=new Date(mx);c.setMonth(c.getMonth()-rangeMonths);return data.filter(d=>new Date(d.date)>=c);}
+function fmtDate(d){const dt=new Date(d);return`${dt.getDate()} ${monthsPL[dt.getMonth()]} ${dt.getFullYear()}`;}
+
+function updateStats(){
+  const f=getFilteredData(),lts=f.map(d=>d.lt),n=lts.length;
+  const rl=rangeMonths===0?'wszystkie':`ost. ${rangeMonths}m`;
+  document.getElementById('statsRow').innerHTML=[
+    {l:'Total',v:data.length,u:''},{l:`W zakresie (${rl})`,v:n,u:''},
+    {l:'Średni LT',v:n?Math.round(lts.reduce((a,b)=>a+b,0)/n):'—',u:n?'dni':''},
+    {l:'Mediana',v:n?Math.round(percentile(lts,50)):'—',u:n?'dni':''},
+    {l:'Min/Max',v:n?Math.min(...lts)+'/'+Math.max(...lts):'—',u:n?'dni':''},
+  ].map(s=>`<div class="stat-card"><div class="label">${s.l}</div><div class="value">${s.v}<span class="unit">${s.u}</span></div></div>`).join('');
 }
 
-function getFilteredData() {
-  if (rangeMonths === 0) return data;
-  const maxD = new Date(Math.max(...data.map(d => new Date(d.date))));
-  const cutoff = new Date(maxD);
-  cutoff.setMonth(cutoff.getMonth() - rangeMonths);
-  return data.filter(d => new Date(d.date) >= cutoff);
-}
+function computeSP(){const f=getFilteredData(),r={};['S','M','L'].forEach(s=>{const v=f.filter(d=>d.size===s).map(d=>d.lt);r[s]={count:v.length,p50:v.length?Math.round(percentile(v,50)):null,p85:v.length?Math.round(percentile(v,85)):null,p95:v.length?Math.round(percentile(v,95)):null};});return r;}
 
-function fmtDate(d) {
-  const dt = new Date(d);
-  return `${dt.getDate()} ${monthsPL[dt.getMonth()]} ${dt.getFullYear()}`;
-}
-
-// ── STATS ──
-function updateStats() {
-  const filtered = getFilteredData();
-  const lts = filtered.map(d => d.lt);
-  const n = lts.length;
-  const avg = n ? Math.round(lts.reduce((a,b) => a+b, 0) / n) : '—';
-  const med = n ? Math.round(percentile(lts, 50)) : '—';
-  const minmax = n ? `${Math.min(...lts)} / ${Math.max(...lts)}` : '—';
-  const rangeLabel = rangeMonths === 0 ? 'wszystkie' : `ostatnie ${rangeMonths} mies.`;
-
-  document.getElementById('statsRow').innerHTML = [
-    { label: 'Elementy (total)', value: data.length, unit: '' },
-    { label: `W zakresie (${rangeLabel})`, value: n, unit: '' },
-    { label: 'Średni LT', value: avg, unit: n ? 'dni' : '' },
-    { label: 'Mediana LT', value: med, unit: n ? 'dni' : '' },
-    { label: 'Min / Max', value: minmax, unit: n ? 'dni' : '' },
-  ].map(s => `<div class="stat-card"><div class="label">${s.label}</div><div class="value">${s.value}<span class="unit">${s.unit}</span></div></div>`).join('');
-}
-
-// ── PERCENTILE CONTROLS ──
-function computeSizePercentiles() {
-  const filtered = getFilteredData();
-  const result = {};
-  ['S','M','L'].forEach(s => {
-    const vals = filtered.filter(d => d.size === s).map(d => d.lt);
-    result[s] = {
-      count: vals.length,
-      p50: vals.length ? Math.round(percentile(vals, 50)) : null,
-      p85: vals.length ? Math.round(percentile(vals, 85)) : null,
-      p95: vals.length ? Math.round(percentile(vals, 95)) : null,
-    };
-  });
-  return result;
-}
-
-function renderPercentileControls() {
-  const sd = computeSizePercentiles();
-  document.getElementById('percentileGrid').innerHTML = ['S','M','L'].map(s => {
-    const d = sd[s];
-    const noData = d.count === 0;
-    return `
-      <div class="percentile-group">
-        <div class="percentile-group-title">
-          <div class="dot" style="background:${COLORS[s].fill}"></div>
-          ${sizeLabels[s]} — ${d.count} elem.
-        </div>
-        <div class="percentile-toggles">
-          <button class="ptoggle ${activePercentiles[s].has(50)?'active-p50':''}" data-size="${s}" data-p="50" onclick="toggleP(this)" ${noData?'disabled':''}>P50</button>
-          <button class="ptoggle ${activePercentiles[s].has(85)?'active-p85':''}" data-size="${s}" data-p="85" onclick="toggleP(this)" ${noData?'disabled':''}>P85</button>
-          <button class="ptoggle ${activePercentiles[s].has(95)?'active-p95':''}" data-size="${s}" data-p="95" onclick="toggleP(this)" ${noData?'disabled':''}>P95</button>
-        </div>
-        <div class="percentile-values">
-          ${noData ? '<span class="no-data-hint">Brak danych w wybranym zakresie</span>' : `
-            <span class="pval pval-p50 ${activePercentiles[s].has(50)?'visible':''}">P50 = ${d.p50} dni</span>
-            <span class="pval pval-p85 ${activePercentiles[s].has(85)?'visible':''}">P85 = ${d.p85} dni</span>
-            <span class="pval pval-p95 ${activePercentiles[s].has(95)?'visible':''}">P95 = ${d.p95} dni</span>
-          `}
-        </div>
-      </div>`;
+function renderPctls(){
+  const sd=computeSP();
+  document.getElementById('percentileGrid').innerHTML=['S','M','L'].map(s=>{const d=sd[s],no=d.count===0;
+    return`<div class="percentile-group"><div class="percentile-group-title"><div class="dot" style="background:${COLORS[s].fill}"></div>${sizeLabels[s]} — ${d.count} elem.</div><div class="percentile-toggles"><button class="ptoggle ${activePercentiles[s].has(50)?'active-p50':''}" data-size="${s}" data-p="50" onclick="toggleP(this)" ${no?'disabled':''}>P50</button><button class="ptoggle ${activePercentiles[s].has(85)?'active-p85':''}" data-size="${s}" data-p="85" onclick="toggleP(this)" ${no?'disabled':''}>P85</button><button class="ptoggle ${activePercentiles[s].has(95)?'active-p95':''}" data-size="${s}" data-p="95" onclick="toggleP(this)" ${no?'disabled':''}>P95</button></div><div class="percentile-values">${no?'<span class="no-data-hint">Brak danych w zakresie</span>':`<span class="pval pval-p50 ${activePercentiles[s].has(50)?'visible':''}">P50 = ${d.p50} dni</span><span class="pval pval-p85 ${activePercentiles[s].has(85)?'visible':''}">P85 = ${d.p85} dni</span><span class="pval pval-p95 ${activePercentiles[s].has(95)?'visible':''}">P95 = ${d.p95} dni</span>`}</div></div>`;
   }).join('');
 }
+function toggleP(btn){if(btn.disabled)return;const s=btn.dataset.size,p=+btn.dataset.p;activePercentiles[s].has(p)?activePercentiles[s].delete(p):activePercentiles[s].add(p);renderPctls();drawScatter();}
+function setRange(btn){document.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');rangeMonths=+btn.dataset.months;updateRangeInfo();fullRefresh();}
+function updateRangeInfo(){if(rangeMonths===0){document.getElementById('rangeInfo').textContent='';return;}const mx=new Date(Math.max(...data.map(d=>new Date(d.date)))),c=new Date(mx);c.setMonth(c.getMonth()-rangeMonths);document.getElementById('rangeInfo').textContent=`od ${fmtDate(c)} → ${getFilteredData().length} elem.`;}
+function addPoint(){const dv=document.getElementById('addDate').value,sv=document.getElementById('addSize').value,lv=+document.getElementById('addLT').value;if(!dv||!sv||isNaN(lv)||lv<1)return;data.push({date:dv,size:sv,lt:lv});data.sort((a,b)=>new Date(a.date)-new Date(b.date));document.getElementById('addDate').value='';document.getElementById('addLT').value='';fullRefresh();}
+function toggleDeleteMode(){deleteMode=!deleteMode;document.getElementById('btnDeleteMode').classList.toggle('active',deleteMode);document.getElementById('deleteHint').classList.toggle('visible',deleteMode);drawScatter();}
+function cancelDelete(){document.getElementById('deleteOverlay').classList.remove('visible');pendingDeleteIdx=-1;}
+function confirmDelete(){if(pendingDeleteIdx>=0&&pendingDeleteIdx<data.length)data.splice(pendingDeleteIdx,1);pendingDeleteIdx=-1;document.getElementById('deleteOverlay').classList.remove('visible');fullRefresh();}
 
-function toggleP(btn) {
-  if (btn.disabled) return;
-  const s = btn.dataset.size, p = parseInt(btn.dataset.p);
-  if (activePercentiles[s].has(p)) { activePercentiles[s].delete(p); } else { activePercentiles[s].add(p); }
-  renderPercentileControls();
-  drawChart();
-}
+// ── SCATTER CHART ──
+const sCanvas=document.getElementById('chart'), sCtx=sCanvas.getContext('2d'), sTooltip=document.getElementById('tooltip');
+const PAD={top:20,right:30,bottom:60,left:60};
+const NJO='#E85D26';
 
-// ── RANGE FILTER ──
-function setRange(btn) {
-  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  rangeMonths = parseInt(btn.dataset.months);
-  updateRangeInfo();
-  fullRefresh();
-}
+function sResize(cv,ct){const r=cv.parentElement.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;cv.style.width=r.width+'px';cv.style.height=r.height+'px';ct.setTransform(d,0,0,d,0,0);}
+function sArea(cv){const r=cv.getBoundingClientRect();return{x:PAD.left,y:PAD.top,w:r.width-PAD.left-PAD.right,h:r.height-PAD.top-PAD.bottom};}
 
-function updateRangeInfo() {
-  const filtered = getFilteredData();
-  if (rangeMonths === 0) {
-    document.getElementById('rangeInfo').textContent = '';
-  } else {
-    const maxD = new Date(Math.max(...data.map(d => new Date(d.date))));
-    const cutoff = new Date(maxD);
-    cutoff.setMonth(cutoff.getMonth() - rangeMonths);
-    document.getElementById('rangeInfo').textContent = `od ${fmtDate(cutoff)} → ${filtered.length} elem.`;
-  }
-}
+let sMinD,sMaxD,sMaxLT;
+function sComputeBounds(){if(!data.length){sMinD=sMaxD=new Date();sMaxLT=100;return;}const ds=data.map(d=>new Date(d.date));sMinD=new Date(Math.min(...ds));sMaxD=new Date(Math.max(...ds));sMaxLT=Math.max(...data.map(d=>d.lt));}
+function sDtoX(d){const a=sArea(sCanvas),r=sMaxD-sMinD||1,m=r*0.03;return a.x+((d-sMinD+m)/(r+2*m))*a.w;}
+function sLtoY(v){const a=sArea(sCanvas),ym=Math.ceil(sMaxLT/50)*50+20;return a.y+a.h-(v/ym)*a.h;}
 
-// ── ADD POINT ──
-function addPoint() {
-  const dateVal = document.getElementById('addDate').value;
-  const sizeVal = document.getElementById('addSize').value;
-  const ltVal = parseInt(document.getElementById('addLT').value);
-  if (!dateVal || !sizeVal || isNaN(ltVal) || ltVal < 1) return;
-  data.push({ date: dateVal, size: sizeVal, lt: ltVal });
-  data.sort((a, b) => new Date(a.date) - new Date(b.date));
-  document.getElementById('addDate').value = '';
-  document.getElementById('addLT').value = '';
-  fullRefresh();
-}
-
-// ── DELETE MODE ──
-function toggleDeleteMode() {
-  deleteMode = !deleteMode;
-  const btn = document.getElementById('btnDeleteMode');
-  const hint = document.getElementById('deleteHint');
-  btn.classList.toggle('active', deleteMode);
-  hint.classList.toggle('visible', deleteMode);
-  drawChart();
-}
-
-function cancelDelete() {
-  document.getElementById('deleteOverlay').classList.remove('visible');
-  pendingDeleteIdx = -1;
-}
-
-function confirmDelete() {
-  if (pendingDeleteIdx >= 0 && pendingDeleteIdx < data.length) {
-    data.splice(pendingDeleteIdx, 1);
-  }
-  pendingDeleteIdx = -1;
-  document.getElementById('deleteOverlay').classList.remove('visible');
-  fullRefresh();
-}
-
-// ── CHART ──
-const canvas = document.getElementById('chart');
-const ctx = canvas.getContext('2d');
-const tooltipEl = document.getElementById('tooltip');
-const PADDING = { top: 20, right: 30, bottom: 60, left: 60 };
-
-function resize() {
-  const rect = canvas.parentElement.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  canvas.style.width = rect.width + 'px';
-  canvas.style.height = rect.height + 'px';
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-}
-
-function getPlotArea() {
-  const rect = canvas.getBoundingClientRect();
-  return { x: PADDING.left, y: PADDING.top, w: rect.width - PADDING.left - PADDING.right, h: rect.height - PADDING.top - PADDING.bottom };
-}
-
-let chartMinDate, chartMaxDate, chartMaxLT;
-
-function computeChartBounds() {
-  if (!data.length) { chartMinDate = new Date(); chartMaxDate = new Date(); chartMaxLT = 100; return; }
-  const dates = data.map(d => new Date(d.date));
-  chartMinDate = new Date(Math.min(...dates));
-  chartMaxDate = new Date(Math.max(...dates));
-  chartMaxLT = Math.max(...data.map(d => d.lt));
-}
-
-function dateToX(d) {
-  const area = getPlotArea();
-  const range = chartMaxDate - chartMinDate || 1;
-  const margin = range * 0.03;
-  return area.x + ((d - chartMinDate + margin) / (range + 2 * margin)) * area.w;
-}
-
-function ltToY(v) {
-  const area = getPlotArea();
-  const yMax = Math.ceil(chartMaxLT / 50) * 50 + 20;
-  return area.y + area.h - (v / yMax) * area.h;
-}
-
-const var_ninja_orange = '#E85D26';
-
-function drawChart() {
-  if (!data.length) return;
-  resize();
-  computeChartBounds();
-  const rect = canvas.getBoundingClientRect();
-  const area = getPlotArea();
-  const yMax = Math.ceil(chartMaxLT / 50) * 50 + 20;
-  const filtered = getFilteredData();
-  const sd = computeSizePercentiles();
-
-  ctx.clearRect(0, 0, rect.width, rect.height);
+function drawScatter(){
+  if(!data.length)return;
+  sResize(sCanvas,sCtx);sComputeBounds();
+  const rect=sCanvas.getBoundingClientRect(),area=sArea(sCanvas),yMax=Math.ceil(sMaxLT/50)*50+20,filtered=getFilteredData(),sd=computeSP();
+  sCtx.clearRect(0,0,rect.width,rect.height);
 
   // Grid
-  const yTicks = [];
-  for (let v = 0; v <= yMax; v += 50) yTicks.push(v);
-  ctx.strokeStyle = '#E8E6E0'; ctx.lineWidth = 1;
-  yTicks.forEach(v => { const y = ltToY(v); ctx.beginPath(); ctx.moveTo(area.x, y); ctx.lineTo(area.x + area.w, y); ctx.stroke(); });
+  const yt=[];for(let v=0;v<=yMax;v+=50)yt.push(v);
+  sCtx.strokeStyle='#E8E6E0';sCtx.lineWidth=1;
+  yt.forEach(v=>{const y=sLtoY(v);sCtx.beginPath();sCtx.moveTo(area.x,y);sCtx.lineTo(area.x+area.w,y);sCtx.stroke();});
+  sCtx.fillStyle='#9C9890';sCtx.font='11px JetBrains Mono,monospace';sCtx.textAlign='right';sCtx.textBaseline='middle';
+  yt.forEach(v=>sCtx.fillText(v,area.x-10,sLtoY(v)));
 
-  // Y labels
-  ctx.fillStyle = '#9C9890'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
-  yTicks.forEach(v => ctx.fillText(v, area.x - 10, ltToY(v)));
-
-  // X month lines
-  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-  const usedM = new Set();
-  data.forEach(d => {
-    const dt = new Date(d.date);
-    const key = `${dt.getFullYear()}-${dt.getMonth()}`;
-    if (!usedM.has(key)) {
-      usedM.add(key);
-      const first = new Date(dt.getFullYear(), dt.getMonth(), 1);
-      const x = dateToX(first);
-      if (x > area.x && x < area.x + area.w) {
-        ctx.strokeStyle = '#D0CEC8'; ctx.setLineDash([3, 5]); ctx.beginPath(); ctx.moveTo(x, area.y); ctx.lineTo(x, area.y + area.h); ctx.stroke(); ctx.setLineDash([]);
-        ctx.fillStyle = '#9C9890';
-        ctx.fillText(monthNames[dt.getMonth()] + (dt.getMonth() === 0 ? ` '${String(dt.getFullYear()).slice(2)}` : ''), x, area.y + area.h + 12);
-      }
-    }
-  });
+  // X months
+  sCtx.textAlign='center';sCtx.textBaseline='top';const usedM=new Set();
+  data.forEach(d=>{const dt=new Date(d.date),k=dt.getFullYear()+'-'+dt.getMonth();if(!usedM.has(k)){usedM.add(k);const f=new Date(dt.getFullYear(),dt.getMonth(),1),x=sDtoX(f);if(x>area.x&&x<area.x+area.w){sCtx.strokeStyle='#D0CEC8';sCtx.setLineDash([3,5]);sCtx.beginPath();sCtx.moveTo(x,area.y);sCtx.lineTo(x,area.y+area.h);sCtx.stroke();sCtx.setLineDash([]);sCtx.fillStyle='#9C9890';sCtx.fillText(monthNames[dt.getMonth()]+(dt.getMonth()===0?` '${String(dt.getFullYear()).slice(2)}`:''),x,area.y+area.h+12);}}});
 
   // Y title
-  ctx.save(); ctx.translate(16, area.y + area.h / 2); ctx.rotate(-Math.PI / 2);
-  ctx.textAlign = 'center'; ctx.fillStyle = '#9C9890'; ctx.font = '12px Space Grotesk, sans-serif';
-  ctx.fillText('Czas realizacji (dni)', 0, 0); ctx.restore();
+  sCtx.save();sCtx.translate(16,area.y+area.h/2);sCtx.rotate(-Math.PI/2);sCtx.textAlign='center';sCtx.fillStyle='#9C9890';sCtx.font='12px Space Grotesk,sans-serif';sCtx.fillText('Czas realizacji (dni)',0,0);sCtx.restore();
 
-  // Range shading — dim out-of-range area
-  if (rangeMonths > 0 && filtered.length < data.length) {
-    const cutoffDate = new Date(chartMaxDate);
-    cutoffDate.setMonth(cutoffDate.getMonth() - rangeMonths);
-    const cutX = dateToX(cutoffDate);
-    if (cutX > area.x) {
-      ctx.fillStyle = 'rgba(245,244,240,0.7)';
-      ctx.fillRect(area.x, area.y, cutX - area.x, area.h);
-      // Vertical cutoff line
-      ctx.strokeStyle = var_ninja_orange; ctx.lineWidth = 2; ctx.setLineDash([6,4]);
-      ctx.beginPath(); ctx.moveTo(cutX, area.y); ctx.lineTo(cutX, area.y + area.h); ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle = var_ninja_orange; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-      ctx.fillText('← poza zakresem', cutX + 6, area.y + 4);
-    }
-  }
+  // Range shade
+  if(rangeMonths>0&&filtered.length<data.length){const cd=new Date(sMaxD);cd.setMonth(cd.getMonth()-rangeMonths);const cx=sDtoX(cd);if(cx>area.x){sCtx.fillStyle='rgba(245,244,240,0.7)';sCtx.fillRect(area.x,area.y,cx-area.x,area.h);sCtx.strokeStyle=NJO;sCtx.lineWidth=2;sCtx.setLineDash([6,4]);sCtx.beginPath();sCtx.moveTo(cx,area.y);sCtx.lineTo(cx,area.y+area.h);sCtx.stroke();sCtx.setLineDash([]);sCtx.fillStyle=NJO;sCtx.font='bold 11px JetBrains Mono,monospace';sCtx.textAlign='left';sCtx.textBaseline='top';sCtx.fillText('← poza zakresem',cx+6,area.y+4);}}
 
-  // Percentile lines (based on filtered data)
-  const pLabelOffsets = {};
-  ['S','M','L'].forEach(s => {
-    activePercentiles[s].forEach(p => {
-      const val = sd[s][`p${p}`];
-      if (val === null) return;
-      const y = ltToY(val);
-      const key = Math.round(y);
-      let offset = 0;
-      while (pLabelOffsets[key + offset]) offset -= 14;
-      pLabelOffsets[key + offset] = true;
+  // Percentile lines
+  const plOff={};['S','M','L'].forEach(s=>{activePercentiles[s].forEach(p=>{const val=sd[s]['p'+p];if(val===null)return;const y=sLtoY(val),k=Math.round(y);let off=0;while(plOff[k+off])off-=14;plOff[k+off]=true;sCtx.strokeStyle=COLORS[s].fill;sCtx.lineWidth=2;sCtx.globalAlpha=0.65;sCtx.setLineDash(PCOLORS[p].dash);sCtx.beginPath();sCtx.moveTo(area.x,y);sCtx.lineTo(area.x+area.w,y);sCtx.stroke();sCtx.setLineDash([]);sCtx.globalAlpha=1;sCtx.fillStyle=COLORS[s].fill;sCtx.font='bold 11px JetBrains Mono,monospace';sCtx.textAlign='left';sCtx.textBaseline='bottom';sCtx.fillText(`${s} P${p}: ${val}`,area.x+5,y-4+off);});});
 
-      ctx.strokeStyle = COLORS[s].fill; ctx.lineWidth = 2; ctx.globalAlpha = 0.65;
-      ctx.setLineDash(PCOLORS[p].dash); ctx.beginPath(); ctx.moveTo(area.x, y); ctx.lineTo(area.x + area.w, y); ctx.stroke();
-      ctx.setLineDash([]); ctx.globalAlpha = 1;
-      ctx.fillStyle = COLORS[s].fill; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
-      ctx.fillText(`${s} P${p}: ${val}`, area.x + 5, y - 4 + offset);
-    });
-  });
-
-  // Data points — all shown, but out-of-range dimmed
-  const filteredSet = new Set(filtered);
-  data.forEach((d, i) => {
-    const dt = new Date(d.date);
-    const x = dateToX(dt);
-    const y = ltToY(d.lt);
-    const c = COLORS[d.size];
-    const r = d.size === 'S' ? 6 : d.size === 'M' ? 8 : 10;
-    const inRange = filteredSet.has(d);
-
-    ctx.globalAlpha = inRange ? 1 : 0.25;
-    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fillStyle = c.bg; ctx.fill();
-    ctx.strokeStyle = deleteMode && inRange ? '#D64545' : c.stroke;
-    ctx.lineWidth = deleteMode && inRange ? 2.5 : 2; ctx.stroke();
-    ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2);
-    ctx.fillStyle = c.fill; ctx.fill();
-    ctx.globalAlpha = 1;
-
-    d._x = x; d._y = y; d._r = r; d._inRange = inRange;
-  });
+  // Points
+  const fSet=new Set(filtered);
+  data.forEach((d,i)=>{const dt=new Date(d.date),x=sDtoX(dt),y=sLtoY(d.lt),c=COLORS[d.size],r=d.size==='S'?6:d.size==='M'?8:10,inR=fSet.has(d);
+    sCtx.globalAlpha=inR?1:0.25;sCtx.beginPath();sCtx.arc(x,y,r,0,Math.PI*2);sCtx.fillStyle=c.bg;sCtx.fill();sCtx.strokeStyle=deleteMode&&inR?'#D64545':c.stroke;sCtx.lineWidth=deleteMode&&inR?2.5:2;sCtx.stroke();sCtx.beginPath();sCtx.arc(x,y,3,0,Math.PI*2);sCtx.fillStyle=c.fill;sCtx.fill();sCtx.globalAlpha=1;d._x=x;d._y=y;d._r=r;d._inRange=inR;});
 }
 
-// Tooltip & click
-canvas.addEventListener('mousemove', function(e) {
-  const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
-  let found = null, minDist = Infinity;
-  data.forEach(d => {
-    const dx = mx - d._x, dy = my - d._y;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    if (dist < d._r + 4 && dist < minDist) { minDist = dist; found = d; }
-  });
-  if (found) {
-    const dt = new Date(found.date);
-    tooltipEl.className = 'tooltip' + (deleteMode ? ' delete-mode' : '');
-    tooltipEl.innerHTML = deleteMode
-      ? `<strong>🗑 Kliknij, aby usunąć</strong><br>${found.lt} dni | ${found.size} | ${fmtDate(found.date)}`
-      : `<strong>${found.lt} dni</strong><br>Rozmiar: ${found.size}<br>${fmtDate(found.date)}`;
-    tooltipEl.style.opacity = 1;
-    tooltipEl.style.left = (found._x - tooltipEl.offsetWidth / 2) + 'px';
-    tooltipEl.style.top = (found._y - tooltipEl.offsetHeight - 14) + 'px';
-    canvas.style.cursor = deleteMode ? 'pointer' : 'default';
-  } else {
-    tooltipEl.style.opacity = 0;
-    canvas.style.cursor = 'default';
-  }
-});
+sCanvas.addEventListener('mousemove',function(e){const r=sCanvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;let f=null,md=Infinity;data.forEach(d=>{const dx=mx-d._x,dy=my-d._y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<d._r+4&&dist<md){md=dist;f=d;}});if(f){sTooltip.className='tooltip'+(deleteMode?' delete-mode':'');sTooltip.innerHTML=deleteMode?`<strong>🗑 Kliknij, aby usunąć</strong><br>${f.lt} dni | ${f.size} | ${fmtDate(f.date)}`:`<strong>${f.lt} dni</strong><br>Rozmiar: ${f.size}<br>${fmtDate(f.date)}`;sTooltip.style.opacity=1;sTooltip.style.left=(f._x-sTooltip.offsetWidth/2)+'px';sTooltip.style.top=(f._y-sTooltip.offsetHeight-14)+'px';sCanvas.style.cursor=deleteMode?'pointer':'default';}else{sTooltip.style.opacity=0;sCanvas.style.cursor='default';}});
+sCanvas.addEventListener('mouseleave',()=>{sTooltip.style.opacity=0;});
+sCanvas.addEventListener('click',function(e){if(!deleteMode)return;const r=sCanvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;let fi=-1,md=Infinity;data.forEach((d,i)=>{const dx=mx-d._x,dy=my-d._y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<d._r+4&&dist<md){md=dist;fi=i;}});if(fi>=0){const d=data[fi];pendingDeleteIdx=fi;document.getElementById('deleteMsg').innerHTML=`<strong>${d.lt} dni</strong> · Rozmiar ${d.size} · ${fmtDate(d.date)}`;document.getElementById('deleteOverlay').classList.add('visible');sTooltip.style.opacity=0;}});
 
-canvas.addEventListener('mouseleave', () => { tooltipEl.style.opacity = 0; });
+function fullRefresh(){updateStats();updateRangeInfo();renderPctls();drawScatter();}
 
-canvas.addEventListener('click', function(e) {
-  if (!deleteMode) return;
-  const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
-  let foundIdx = -1, minDist = Infinity;
-  data.forEach((d, i) => {
-    const dx = mx - d._x, dy = my - d._y;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    if (dist < d._r + 4 && dist < minDist) { minDist = dist; foundIdx = i; }
-  });
-  if (foundIdx >= 0) {
-    const d = data[foundIdx];
-    pendingDeleteIdx = foundIdx;
-    document.getElementById('deleteMsg').innerHTML =
-      `<strong>${d.lt} dni</strong> &middot; Rozmiar ${d.size} &middot; ${fmtDate(d.date)}`;
-    document.getElementById('deleteOverlay').classList.add('visible');
-    tooltipEl.style.opacity = 0;
-  }
-});
+// ══════════════════════════════════════════════════════
+//  XmR CHART
+// ══════════════════════════════════════════════════════
+const TP_RAW = [
+['2025-01-07',0],['2025-01-08',2],['2025-01-09',10],['2025-01-10',3],['2025-01-11',0],['2025-01-12',0],['2025-01-13',2],['2025-01-14',3],['2025-01-15',7],['2025-01-16',0],['2025-01-17',0],['2025-01-18',0],['2025-01-19',0],['2025-01-20',5],['2025-01-21',2],['2025-01-22',0],['2025-01-23',0],['2025-01-24',0],['2025-01-25',0],['2025-01-26',0],['2025-01-27',1],['2025-01-28',1],['2025-01-29',0],['2025-01-30',5],['2025-01-31',4],
+['2025-02-01',0],['2025-02-02',0],['2025-02-03',7],['2025-02-04',0],['2025-02-05',2],['2025-02-06',2],['2025-02-07',12],['2025-02-08',0],['2025-02-09',0],['2025-02-10',1],['2025-02-11',0],['2025-02-12',0],['2025-02-13',2],['2025-02-14',12],['2025-02-15',0],['2025-02-16',0],['2025-02-17',1],['2025-02-18',0],['2025-02-19',0],['2025-02-20',3],['2025-02-21',11],['2025-02-22',0],['2025-02-23',0],['2025-02-24',6],['2025-02-25',0],['2025-02-26',0],['2025-02-27',6],['2025-02-28',7],
+['2025-03-01',0],['2025-03-02',0],['2025-03-03',2],['2025-03-04',0],['2025-03-05',0],['2025-03-06',3],['2025-03-07',5],['2025-03-08',0],['2025-03-09',0],['2025-03-10',1],['2025-03-11',0],['2025-03-12',0],['2025-03-13',9],['2025-03-14',7],['2025-03-15',0],['2025-03-16',0],['2025-03-17',3],['2025-03-18',0],['2025-03-19',0],['2025-03-20',4],['2025-03-21',10],['2025-03-22',0],['2025-03-23',0],['2025-03-24',1],['2025-03-25',0],['2025-03-26',0],['2025-03-27',5],['2025-03-28',1],['2025-03-29',0],['2025-03-30',0],['2025-03-31',2],
+['2025-04-01',0],['2025-04-02',0],['2025-04-03',2],['2025-04-04',11],['2025-04-05',0],['2025-04-06',0],['2025-04-07',1],['2025-04-08',0],['2025-04-09',0],['2025-04-10',5],['2025-04-11',2],['2025-04-12',0],['2025-04-13',0],['2025-04-14',1],['2025-04-15',0],['2025-04-16',0],['2025-04-17',4],['2025-04-18',7],['2025-04-19',0]
+];
 
-// ── FULL REFRESH ──
-function fullRefresh() {
-  updateStats();
-  updateRangeInfo();
-  renderPercentileControls();
-  drawChart();
+// Compute XmR
+const xVals = TP_RAW.map(r => r[1]);
+const xBar = xVals.reduce((a,b) => a+b, 0) / xVals.length;
+
+const mrVals = [];
+for (let i = 1; i < xVals.length; i++) mrVals.push(Math.abs(xVals[i] - xVals[i-1]));
+const mrBar = mrVals.reduce((a,b) => a+b, 0) / mrVals.length;
+
+const UNPL_X = xBar + 2.66 * mrBar;
+const LNPL_X = Math.max(0, xBar - 2.66 * mrBar);
+const UNPL_MR = 3.268 * mrBar; // D4 for n=2
+
+function drawXmR() {
+  drawXChart();
+  drawMRChart();
+  renderXmrStats();
 }
 
-window.addEventListener('resize', drawChart);
+function renderXmrStats() {
+  document.getElementById('xmrStats').innerHTML = [
+    {l:'Obserwacje', v:xVals.length, u:'dni'},
+    {l:'X̄ (średnia)', v:xBar.toFixed(2), u:''},
+    {l:'mR̄', v:mrBar.toFixed(2), u:''},
+    {l:'UNPL', v:UNPL_X.toFixed(1), u:''},
+    {l:'LNPL', v:LNPL_X.toFixed(1), u:''},
+    {l:'UNPL mR', v:UNPL_MR.toFixed(1), u:''},
+  ].map(s => `<div class="stat-card"><div class="label">${s.l}</div><div class="value">${s.v}<span class="unit">${s.u}</span></div></div>`).join('');
+}
 
-// Set default date
+// ── Shared XmR drawing helpers ──
+function xmrResize(cv, ct) {
+  const r = cv.parentElement.getBoundingClientRect(), d = devicePixelRatio || 1;
+  cv.width = r.width * d; cv.height = r.height * d;
+  cv.style.width = r.width + 'px'; cv.style.height = r.height + 'px';
+  ct.setTransform(d, 0, 0, d, 0, 0);
+}
+
+function xmrArea(cv) {
+  const r = cv.getBoundingClientRect();
+  return { x: 55, y: 20, w: r.width - 70, h: r.height - 75 };
+}
+
+function drawLineChart(cv, ct, tooltip, values, avg, upper, lower, lineColor, dotColor, label) {
+  xmrResize(cv, ct);
+  const rect = cv.getBoundingClientRect();
+  const area = xmrArea(cv);
+  const n = values.length;
+  const yMax = Math.max(Math.ceil((Math.max(...values, upper) * 1.15) / 2) * 2, 1);
+
+  ct.clearRect(0, 0, rect.width, rect.height);
+
+  const xStep = area.w / (n - 1 || 1);
+  const toX = i => area.x + i * xStep;
+  const toY = v => area.y + area.h - (v / yMax) * area.h;
+
+  // Grid
+  const nTicks = 6;
+  ct.strokeStyle = '#E8E6E0'; ct.lineWidth = 1;
+  ct.fillStyle = '#9C9890'; ct.font = '11px JetBrains Mono, monospace'; ct.textAlign = 'right'; ct.textBaseline = 'middle';
+  for (let i = 0; i <= nTicks; i++) {
+    const v = (yMax / nTicks) * i;
+    const y = toY(v);
+    ct.beginPath(); ct.moveTo(area.x, y); ct.lineTo(area.x + area.w, y); ct.stroke();
+    ct.fillText(v.toFixed(v % 1 ? 1 : 0), area.x - 8, y);
+  }
+
+  // X labels (every ~7th)
+  ct.textAlign = 'center'; ct.textBaseline = 'top'; ct.fillStyle = '#9C9890'; ct.font = '10px JetBrains Mono, monospace';
+  const step = Math.max(1, Math.floor(n / 14));
+  for (let i = 0; i < n; i += step) {
+    const dt = new Date(TP_RAW[label === 'mR' ? i + 1 : i][0]);
+    ct.fillText(`${dt.getDate()}/${dt.getMonth()+1}`, toX(i), area.y + area.h + 8);
+  }
+
+  // UNPL / LNPL
+  ct.setLineDash([6, 4]); ct.lineWidth = 2; ct.strokeStyle = '#D64545';
+  ct.beginPath(); ct.moveTo(area.x, toY(upper)); ct.lineTo(area.x + area.w, toY(upper)); ct.stroke();
+  if (lower !== null && lower >= 0) {
+    ct.beginPath(); ct.moveTo(area.x, toY(lower)); ct.lineTo(area.x + area.w, toY(lower)); ct.stroke();
+  }
+  ct.setLineDash([]);
+
+  // Labels for limits
+  ct.fillStyle = '#D64545'; ct.font = 'bold 11px JetBrains Mono, monospace'; ct.textAlign = 'right'; ct.textBaseline = 'bottom';
+  ct.fillText(`UNPL: ${upper.toFixed(1)}`, area.x + area.w, toY(upper) - 4);
+  if (lower !== null && lower >= 0) {
+    ct.textBaseline = 'top';
+    ct.fillText(`LNPL: ${lower.toFixed(1)}`, area.x + area.w, toY(lower) + 4);
+  }
+
+  // Average line
+  ct.strokeStyle = NJO; ct.lineWidth = 2; ct.setLineDash([]);
+  ct.beginPath(); ct.moveTo(area.x, toY(avg)); ct.lineTo(area.x + area.w, toY(avg)); ct.stroke();
+  ct.fillStyle = NJO; ct.font = 'bold 11px JetBrains Mono, monospace'; ct.textAlign = 'left'; ct.textBaseline = 'bottom';
+  ct.fillText(`${label === 'mR' ? 'mR̄' : 'X̄'}: ${avg.toFixed(2)}`, area.x + 4, toY(avg) - 4);
+
+  // Line
+  ct.strokeStyle = lineColor; ct.lineWidth = 2; ct.setLineDash([]);
+  ct.beginPath();
+  values.forEach((v, i) => { i === 0 ? ct.moveTo(toX(i), toY(v)) : ct.lineTo(toX(i), toY(v)); });
+  ct.stroke();
+
+  // Dots — highlight out-of-control
+  values.forEach((v, i) => {
+    const x = toX(i), y = toY(v);
+    const ooc = v > upper || (lower !== null && v < lower);
+    ct.beginPath(); ct.arc(x, y, ooc ? 6 : 4, 0, Math.PI * 2);
+    ct.fillStyle = ooc ? '#D64545' : dotColor;
+    ct.fill();
+    if (ooc) { ct.strokeStyle = '#D64545'; ct.lineWidth = 2; ct.stroke(); }
+  });
+
+  // Store positions for tooltip
+  values.forEach((v, i) => { values['_pos_' + i] = { x: toX(i), y: toY(v) }; });
+
+  return { toX, toY, xStep, n: values.length };
+}
+
+// ── X Chart ──
+const xCanvas = document.getElementById('xChart'), xCtx = xCanvas.getContext('2d'), xTip = document.getElementById('xTooltip');
+
+function drawXChart() {
+  drawLineChart(xCanvas, xCtx, xTip, xVals, xBar, UNPL_X, LNPL_X, '#3B7DD8', 'rgba(59,125,216,0.8)', 'X');
+}
+
+xCanvas.addEventListener('mousemove', function(e) {
+  const r = xCanvas.getBoundingClientRect(), mx = e.clientX - r.left;
+  const area = xmrArea(xCanvas), xStep = area.w / (xVals.length - 1 || 1);
+  const idx = Math.round((mx - area.x) / xStep);
+  if (idx >= 0 && idx < xVals.length) {
+    const pos = xVals['_pos_' + idx];
+    if (!pos) return;
+    const dt = new Date(TP_RAW[idx][0]);
+    const ooc = xVals[idx] > UNPL_X || xVals[idx] < LNPL_X;
+    xTip.innerHTML = `<strong>${xVals[idx]}</strong> elem.<br>${dt.getDate()} ${monthsPL[dt.getMonth()]} ${dt.getFullYear()}${ooc ? '<br><span style="color:#ff6b6b">⚠ Poza kontrolą</span>' : ''}`;
+    xTip.style.opacity = 1;
+    xTip.style.left = (pos.x - xTip.offsetWidth / 2) + 'px';
+    xTip.style.top = (pos.y - xTip.offsetHeight - 14) + 'px';
+  } else { xTip.style.opacity = 0; }
+});
+xCanvas.addEventListener('mouseleave', () => { xTip.style.opacity = 0; });
+
+// ── mR Chart ──
+const mrCanvas = document.getElementById('mrChart'), mrCtx = mrCanvas.getContext('2d'), mrTip = document.getElementById('mrTooltip');
+
+function drawMRChart() {
+  drawLineChart(mrCanvas, mrCtx, mrTip, mrVals, mrBar, UNPL_MR, null, '#9B59B6', 'rgba(155,89,182,0.8)', 'mR');
+}
+
+mrCanvas.addEventListener('mousemove', function(e) {
+  const r = mrCanvas.getBoundingClientRect(), mx = e.clientX - r.left;
+  const area = xmrArea(mrCanvas), xStep = area.w / (mrVals.length - 1 || 1);
+  const idx = Math.round((mx - area.x) / xStep);
+  if (idx >= 0 && idx < mrVals.length) {
+    const pos = mrVals['_pos_' + idx];
+    if (!pos) return;
+    const dt = new Date(TP_RAW[idx + 1][0]);
+    const ooc = mrVals[idx] > UNPL_MR;
+    mrTip.innerHTML = `<strong>mR = ${mrVals[idx]}</strong><br>${dt.getDate()} ${monthsPL[dt.getMonth()]} ${dt.getFullYear()}${ooc ? '<br><span style="color:#ff6b6b">⚠ Poza kontrolą</span>' : ''}`;
+    mrTip.style.opacity = 1;
+    mrTip.style.left = (pos.x - mrTip.offsetWidth / 2) + 'px';
+    mrTip.style.top = (pos.y - mrTip.offsetHeight - 14) + 'px';
+  } else { mrTip.style.opacity = 0; }
+});
+mrCanvas.addEventListener('mouseleave', () => { mrTip.style.opacity = 0; });
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+window.addEventListener('resize', () => { drawScatter(); if (document.getElementById('page-xmr').classList.contains('active')) drawXmR(); });
 document.getElementById('addDate').valueAsDate = new Date();
-
 fullRefresh();
 </script>
 </body>
