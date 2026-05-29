@@ -1,1 +1,230 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monte Carlo — Prognoza dostarczenia backlogu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Spline+Sans+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0f14; --panel:#161a23; --panel2:#1d222e; --ink:#eef1f6;
+    --muted:#8b93a7; --line:#2a3140;
+    --c75:#f4a259; --c85:#ef6f6c; --c90:#bc6ef5; --c95:#56b4d3; --c99:#5fd39a;
+    --accent:#5fd39a; --warn:#ef6f6c;
+    --mono:'Spline Sans Mono',monospace; --sans:'Spline Sans',sans-serif; --disp:'Fraunces',serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
+    background-image:radial-gradient(circle at 15% 0%,rgba(95,211,154,.07),transparent 40%),radial-gradient(circle at 90% 10%,rgba(86,180,211,.07),transparent 45%);
+    min-height:100vh;padding:48px 28px 80px}
+  .wrap{max-width:1180px;margin:0 auto}
+  header{margin-bottom:14px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  h1{font-family:var(--disp);font-weight:900;font-size:clamp(34px,5vw,58px);line-height:1.02;letter-spacing:-.02em}
+  h1 em{font-style:italic;color:var(--c95)}
+  .sub{color:var(--muted);max-width:680px;margin-top:14px;font-size:15px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;font-family:var(--mono);font-size:12.5px}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 14px;color:var(--muted)}
+  .chip b{color:var(--ink);font-weight:600}
+  .grid{display:grid;gap:18px;margin-top:34px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px}
+  .ptitle{font-family:var(--disp);font-weight:600;font-size:22px;margin-bottom:4px}
+  .pdesc{color:var(--muted);font-size:14px;margin-bottom:20px}
 
+  /* Q1/Q2 hero answers */
+  .answers{grid-template-columns:1fr 1fr}
+  @media(max-width:760px){.answers{grid-template-columns:1fr}}
+  .bignum{font-family:var(--disp);font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1;letter-spacing:-.02em}
+  .bignum.green{color:var(--c95)} .bignum.amber{color:var(--c85)}
+  .conf-row{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+  .conf{flex:1;min-width:120px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .conf .lbl{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.1em}
+  .conf .dt{font-weight:600;font-size:15px;margin-top:4px}
+  .conf .sp{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px}
+
+  /* scenario table */
+  table{width:100%;border-collapse:collapse;font-size:14.5px}
+  th,td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--line)}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  td.num{font-family:var(--mono);font-weight:600}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:9px;vertical-align:middle}
+  .barcell{position:relative;min-width:180px}
+  .bar{height:9px;border-radius:5px;background:linear-gradient(90deg,var(--accent),var(--c95))}
+  tr:hover td{background:rgba(255,255,255,.018)}
+
+  canvas{width:100%;display:block}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .legend span{display:flex;align-items:center}
+  .foot{margin-top:42px;color:var(--muted);font-size:12.5px;font-family:var(--mono);border-top:1px solid var(--line);padding-top:20px}
+  .loading{color:var(--muted);font-family:var(--mono);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">Monte Carlo Forecast · Delivery Management</div>
+    <h1>Kiedy dowieziemy <em>62 elementy</em><br>backlogu?</h1>
+    <p class="sub">Prognoza probabilistyczna oparta na 50&nbsp;000 symulacji Monte&nbsp;Carlo, losujących historyczne tempo dostarczania zespołu. Zamiast jednej „pewnej" daty pokazujemy rozkład wyników i poziomy pewności.</p>
+    <div class="meta">
+      <div class="chip">Start prac: <b>1 czerwca 2026</b></div>
+      <div class="chip">Iteracja: <b>2 tygodnie</b></div>
+      <div class="chip">Backlog: <b>62 elementy</b></div>
+      <div class="chip">Próbka throughput: <b>5,4,4,5,6,4,2,3,2,5,6</b></div>
+      <div class="chip">Symulacji: <b id="ntrials">—</b></div>
+    </div>
+  </header>
+
+  <div class="grid answers">
+    <div class="panel">
+      <div class="ptitle">① Ukończenie 85% backlogu</div>
+      <div class="pdesc">53 z 62 elementów (zaokr. w górę z 52,7)</div>
+      <div class="bignum amber" id="q1-main">—</div>
+      <div class="conf-row" id="q1-conf"></div>
+    </div>
+    <div class="panel">
+      <div class="ptitle">② Ukończenie całości — 62 elementy</div>
+      <div class="pdesc">Cały zakres dowieziony</div>
+      <div class="bignum green" id="q2-main">—</div>
+      <div class="conf-row" id="q2-conf"></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <div class="ptitle">③ Ile zdążymy do końca września 2026?</div>
+      <div class="pdesc">Okno: 1 cze → 30 wrz 2026 · <span id="sprints-avail">—</span> pełnych iteracji. „Z pewnością X% dowieziemy co najmniej N elementów" — im wyższa pewność, tym ostrożniejsza (niższa) liczba.</div>
+      <table>
+        <thead><tr><th>Scenariusz / pewność</th><th>Co najmniej (elementów)</th><th>Margines do 62</th><th>Wizualizacja</th></tr></thead>
+        <tbody id="scenario-body"><tr><td class="loading" colspan="4">Liczę 50 000 symulacji…</td></tr></tbody>
+      </table>
+      <p class="pdesc" style="margin-top:16px;margin-bottom:0">Interpretacja: bezpieczne zobowiązanie na koniec września to wynik przy 90–95% pewności. Wartości przy 50% to mediana (równe szanse, że będzie lepiej lub gorzej) — nie nadają się na commitment wobec interesariuszy.</p>
+    </div>
+
+    <div class="panel">
+      <div class="ptitle">Rozkład daty ukończenia całości (62)</div>
+      <div class="pdesc">Każdy słupek = prawdopodobieństwo zakończenia w danej iteracji. Linie pokazują progi pewności.</div>
+      <canvas id="hist" height="320"></canvas>
+      <div class="legend">
+        <span><i class="dot" style="background:var(--c75)"></i>P75</span>
+        <span><i class="dot" style="background:var(--c85)"></i>P85</span>
+        <span><i class="dot" style="background:var(--c95)"></i>P95</span>
+        <span><i class="dot" style="background:var(--c99)"></i>P99</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="ptitle">Krzywa pewności — ile elementów do 30.09.2026</div>
+      <div class="pdesc">Oś X: poziom pewności. Oś Y: liczba elementów, którą dowieziemy z co najmniej tą pewnością.</div>
+      <canvas id="curve" height="300"></canvas>
+    </div>
+  </div>
+
+  <div class="foot" id="foot">—</div>
+</div>
+
+<script>
+const throughput=[5,4,4,5,6,4,2,3,2,5,6];
+const BACKLOG=62, TRIALS=50000;
+const startDate=new Date(2026,5,1);          // 1 czerwca 2026
+const endSept=new Date(2026,8,30);           // 30 września 2026
+const pick=a=>a[(Math.random()*a.length)|0];
+
+// --- date helpers ---
+const PL=['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
+function sprintToDate(s){const d=new Date(startDate);d.setDate(d.getDate()+14*s);return d;}
+function fmt(d){return d.getDate()+' '+PL[d.getMonth()]+' '+d.getFullYear();}
+function pctl(sorted,p){return sorted[Math.min(sorted.length-1,Math.floor(p/100*sorted.length))];}
+
+// --- simulations ---
+function sprintsToFinish(n){let done=0,s=0;while(done<n){done+=pick(throughput);s++;}return s;}
+function itemsInSprints(s){let t=0;for(let i=0;i<s;i++)t+=pick(throughput);return t;}
+
+const fin62=[],fin53=[];
+for(let i=0;i<TRIALS;i++){fin62.push(sprintsToFinish(62));fin53.push(sprintsToFinish(53));}
+fin62.sort((a,b)=>a-b);fin53.sort((a,b)=>a-b);
+
+// available full sprints to end Sept (1 Jun -> 30 Sep = ~17.3 wks => 8 sprints)
+const weeks=(endSept-startDate)/(1000*3600*24*7);
+const sprintsAvail=Math.floor(weeks/2);
+const itemsBy=[];
+for(let i=0;i<TRIALS;i++)itemsBy.push(itemsInSprints(sprintsAvail));
+itemsBy.sort((a,b)=>a-b);
+// "at least N with X% confidence" = (100-X)th percentile
+const atLeast=conf=>pctl(itemsBy,100-conf);
+
+document.getElementById('ntrials').textContent=TRIALS.toLocaleString('pl-PL');
+document.getElementById('sprints-avail').textContent=sprintsAvail;
+
+// --- Q1 / Q2 confidence cards ---
+function card(arr,conf){const s=pctl(arr,conf);return `<div class="conf"><div class="lbl">${conf}% PEWNOŚCI</div><div class="dt">${fmt(sprintToDate(s))}</div><div class="sp">${s} iteracji</div></div>`;}
+document.getElementById('q1-main').textContent=fmt(sprintToDate(pctl(fin53,85)));
+document.getElementById('q1-conf').innerHTML=[75,85,95,99].map(c=>card(fin53,c)).join('');
+document.getElementById('q2-main').textContent=fmt(sprintToDate(pctl(fin62,85)));
+document.getElementById('q2-conf').innerHTML=[75,85,95,99].map(c=>card(fin62,c)).join('');
+
+// --- Q3 scenario table ---
+const confs=[99,95,90,85,75];
+const cols={99:'var(--c99)',95:'var(--c95)',90:'var(--c90)',85:'var(--c85)',75:'var(--c75)'};
+const maxItems=atLeast(75);
+document.getElementById('scenario-body').innerHTML=confs.map(c=>{
+  const n=atLeast(c);const w=Math.round(n/62*100);
+  return `<tr>
+    <td><span class="dot" style="background:${cols[c]}"></span>${c}% pewności</td>
+    <td class="num">${n} / 62</td>
+    <td class="num" style="color:var(--muted)">−${62-n}</td>
+    <td class="barcell"><div class="bar" style="width:${w}%;background:${cols[c]}"></div></td>
+  </tr>`;}).join('');
+
+// --- histogram (completion of 62) ---
+(function(){
+  const cv=document.getElementById('hist');const dpr=window.devicePixelRatio||1;
+  const W=cv.clientWidth,H=320;cv.width=W*dpr;cv.height=H*dpr;const x=cv.getContext('2d');x.scale(dpr,dpr);
+  const min=fin62[0],max=fin62[fin62.length-1];const bins={};
+  for(const v of fin62)bins[v]=(bins[v]||0)+1;
+  const keys=[];for(let k=min;k<=max;k++)keys.push(k);
+  const peak=Math.max(...Object.values(bins));
+  const padL=44,padB=34,padT=12,padR=8;const cw=(W-padL-padR)/keys.length;
+  keys.forEach((k,i)=>{const h=((bins[k]||0)/peak)*(H-padB-padT);
+    const g=x.createLinearGradient(0,H-padB-h,0,H-padB);g.addColorStop(0,'#56b4d3');g.addColorStop(1,'#2f4658');
+    x.fillStyle=g;x.fillRect(padL+i*cw+1,H-padB-h,cw-2,h);});
+  // axis
+  x.fillStyle='#8b93a7';x.font='11px Spline Sans Mono';
+  keys.forEach((k,i)=>{if(k%1===0&&(keys.length<=20||i%2===0)){x.fillText(k,padL+i*cw+cw/2-5,H-padB+16);}});
+  x.fillText('iteracja →',W-72,H-4);
+  // percentile lines
+  [[75,'#f4a259'],[85,'#ef6f6c'],[95,'#56b4d3'],[99,'#5fd39a']].forEach(([p,col])=>{
+    const s=pctl(fin62,p);const i=keys.indexOf(s);if(i<0)return;const px=padL+i*cw+cw/2;
+    x.strokeStyle=col;x.lineWidth=2;x.setLineDash([4,4]);x.beginPath();x.moveTo(px,padT);x.lineTo(px,H-padB);x.stroke();x.setLineDash([]);
+    x.fillStyle=col;x.font='600 11px Spline Sans Mono';x.fillText('P'+p,px-9,padT+10);});
+})();
+
+// --- confidence curve (items by end Sept) ---
+(function(){
+  const cv=document.getElementById('curve');const dpr=window.devicePixelRatio||1;
+  const W=cv.clientWidth,H=300;cv.width=W*dpr;cv.height=H*dpr;const x=cv.getContext('2d');x.scale(dpr,dpr);
+  const padL=40,padB=36,padT=14,padR=14;
+  const pts=[];for(let c=50;c<=99;c++)pts.push([c,atLeast(c)]);
+  const ys=pts.map(p=>p[1]);const ymin=Math.min(...ys)-1,ymax=Math.max(...ys)+1;
+  const X=c=>padL+((c-50)/49)*(W-padL-padR);
+  const Y=v=>H-padB-((v-ymin)/(ymax-ymin))*(H-padB-padT);
+  // grid
+  x.strokeStyle='#2a3140';x.lineWidth=1;x.font='11px Spline Sans Mono';x.fillStyle='#8b93a7';
+  for(let v=Math.ceil(ymin);v<=Math.floor(ymax);v++){x.beginPath();x.moveTo(padL,Y(v));x.lineTo(W-padR,Y(v));x.stroke();x.fillText(v,6,Y(v)+4);}
+  [50,75,85,90,95,99].forEach(c=>{x.fillText(c+'%',X(c)-8,H-padB+18);});
+  // area + line
+  const grad=x.createLinearGradient(0,padT,0,H-padB);grad.addColorStop(0,'rgba(95,211,154,.32)');grad.addColorStop(1,'rgba(95,211,154,0)');
+  x.beginPath();x.moveTo(X(50),Y(pts[0][1]));pts.forEach(p=>x.lineTo(X(p[0]),Y(p[1])));x.lineTo(X(99),H-padB);x.lineTo(X(50),H-padB);x.closePath();x.fillStyle=grad;x.fill();
+  x.beginPath();x.moveTo(X(50),Y(pts[0][1]));pts.forEach(p=>x.lineTo(X(p[0]),Y(p[1])));x.strokeStyle='#5fd39a';x.lineWidth=2.5;x.stroke();
+  // markers
+  [75,85,90,95,99].forEach(c=>{const v=atLeast(c);x.fillStyle='#5fd39a';x.beginPath();x.arc(X(c),Y(v),4,0,7);x.fill();
+    x.fillStyle='#eef1f6';x.font='600 11px Spline Sans Mono';x.fillText(v,X(c)-6,Y(v)-10);});
+  x.fillStyle='#8b93a7';x.font='11px Spline Sans Mono';x.fillText('pewność →',W-86,H-4);
+})();
+
+document.getElementById('foot').textContent=
+ `Model: Monte Carlo, ${TRIALS.toLocaleString('pl-PL')} przebiegów · throughput losowany z 11 historycznych iteracji (śr. ${(throughput.reduce((a,b)=>a+b,0)/throughput.length).toFixed(2)} elem./iter.) · obliczenia wykonywane na żywo w przeglądarce. Daty zakładają start 1.06.2026 i pełne 2-tyg. iteracje.`;
+</script>
+</body>
+</html>
